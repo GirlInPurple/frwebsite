@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <!-- discord embed integration -->
+        <meta content="Final Republic" property="og:site_name">
+        <meta content="Testing Page | Final Republic" property="og:title">
+        <meta content="The page for testing certain new features." property="og:description">
+        <meta content="https://cdn.discordapp.com/attachments/1061516148325220455/1074527045561884722/f7bd4c45-d74b-405c-b57c-852917af9cc7.png" property='og:image'>
+        <meta name="theme-color" content="#f0fff0">
+
+        <!-- make the website look good -->
+        <title>Error Page | Final Republic</title>
+        <link id="themeStylesheet" rel="stylesheet" href="light.css">
+        <script src="clientFunctions.js"></script>
+
+        <!-- mobile support, keep this at the end of <head> so it can override the loaded stylesheet -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            nav {
+                height: 100px;
+            }
+
+            div.backnav {
+                display: flex;
+                position:absolute; 
+                top:0; 
+                right:0px;
+                width: 75%;
+                height: 100px;
+                
+                background-color: #d5d5d5;
+                background-image: url('./assets/background.png');
+                background-repeat: no-repeat;
+                background-position-x: center;
+                background-position-y: -490px;
+            }
+
+            div.basicnav {
+                background-color: #bd97bd;
+                position:absolute;
+                width: 25%;
+                height: 100px;
+                top:0;
+            }
+
+            .topnav {
+                background-color: #bd97bd;
+                overflow: clip;
+                position:absolute; 
+                top:0px; 
+                left:100px;
+            }
+
+            .botnav {
+                overflow: hidden;
+                position:absolute; 
+                top:45px; 
+                left:100px;
+            }
+
+            /* Style the links inside the navigation bar */
+            .botnav a {
+                float: left;
+                color: #2b2b2b;
+                background-color: #bd97bd;
+                text-align: center;
+                padding: 10px 10px;
+                text-decoration: none;
+            }
+
+            /* Change the color of links on hover */
+            .botnav a:hover {
+                background-color: #6d576d;
+                color: rgb(255, 255, 255);
+            }
+
+            /* Add a color to the active/current link */
+            .botnav a.active {
+                background-color: #04AA6D;
+                color: white;
+            }
+
+            @keyframes splashAnimation {
+                0%   {scale: 1;}
+                100%  {scale: 1.2;}
+            }
+
+            .splashText {
+                font-size: 20px; 
+                color: yellow; 
+                rotate: -25deg; 
+                position:absolute; 
+                top:3%; 
+                right:3%;
+                animation-name: splashAnimation;
+                animation-duration: 1s;
+                animation-iteration-count: infinite;
+                animation-direction: alternate;
+            }
+        </style>
+
+    </head>
+    <nav>
+        <div class="basicnav">
+            <div class="topnav">
+                <p>FinalRepublic, A Towny/Building Server</p>
+            </div>
+            <div class="botnav">
+                <p>
+                    <a href="index.html">Home</a>
+                    <a href="wiki.html">Wiki</a>
+                    <a href="map.html">Map</a>
+                    <a href="about.html">About</a>
+                    <a onclick="">Theme</a>
+                </p>
+            </div>
+        </div>
+        <div class="backnav"></div>
+        <img src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="width:100px; position:absolute; top:0px; left:0px;">
+    </nav>
+    <body id="body">
+        <div class="center">
+            <h1>Testing!</h1>
+            <h3>You found the testing page, congrats!</h3>
+            <p>Click <a href="index.html">Here</a> to go back home.</p>
+        </div>
+    </body>
+    <footer id="footer">
+        <p style="text-align: center;">
+            &copy; 2023-2023 The Final Republic, FinalRepublic | Not an offical Minecraft product. Not approved by or associated with Mojang.
+            <a href="/finalrepublic/contact.html">Contact, Legal, About</a>, <a onclick="document.getElementById('footer').style.display = 'none';">Click to hide</a>
+        </p>
+    </footer>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <!-- discord embed integration -->
+        <meta content="Final Republic" property="og:site_name">
+        <meta content="Wiki | Final Republic" property="og:title">
+        <meta content="The wiki pages for FinalRepublic, from everything between a cult about chickens to multiple a full scale wars." property="og:description">
+        <meta content="https://cdn.discordapp.com/attachments/1061516148325220455/1074527045561884722/f7bd4c45-d74b-405c-b57c-852917af9cc7.png" property='og:image'>
+        <meta name="theme-color" content="#f0fff0">
+
+        <!-- make the website look good -->
+        <title>Wiki | Final Republic</title>
+        <link id="themeStylesheet" rel="stylesheet" href="light.css">
+        <script src="clientFunctions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script> 
+        <!-- wiki library -->
+        <link id="themeStylesheet" rel="stylesheet" href="wiki.css">
+        <link id="themeStylesheet" rel="stylesheet" href="./assets/authors.css">
+        <!-- wiki overrides -->
+
+        <!-- mobile support, keep this at the end of <head> so it can override the loaded stylesheet -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    </head>
+    <nav class="tab">
+        <img src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
+        <div class="topnav">
+            <a href="index.html">Home</a>
+            <a class="active" href="wiki.html">Wiki</a>
+            <a href="map.html">Map</a>
+            <a href="about.html">About</a>
+        </div>
+        <img class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:4%; max-height:4%;">
+    </nav>
+    <body id="body">
+        <div class="center">
+            <div id="hideWhenArticle">
+                <h1><i><noscript>Your browser either does not support JavaScript or you have it turned off. This site wont work without it, please enable it!</noscript></i></h1>
+
+                <h1>The Final Republic Wiki</h1>
+                <h3 id="numberOfArticles"></h3>
+                <h3 id="numberOfSuccesses"></h3>
+
+                <input type="text" id="searchInput" placeholder="Search for articles and tags..." autofocus>
+                <button type="button" onclick="document.getElementById('searchInput').value = null; searchInput.dispatchEvent(new Event('input'));">Click to Clear</button>
+                <br>
+
+                <p class="coolp">
+                    <a href="#wiki-guide">Wiki Guide (Start Here!)</a> | <a href="wiki-edit.html">Wiki Editor (Need An Account!)</a>
+                </p>
+                
+                <details>
+                    <summary>Topics</summary>
+                    <details>
+                        <summary>Basic</summary>
+                        <p>Some text</p>
+                        <!-- injects here -->
+                    </details>
+                    <details>
+                        <summary>Misc</summary>
+                        <p>Some text</p>
+                        <!-- injects here -->
+                    </details>
+                    <details>
+                        <summary>Years</summary>
+                        <p>Some text</p>
+                        <!-- injects here -->
+                    </details>
+                </details>
+                <details>
+                    <summary>Languages</summary>
+                    <!-- injects here -->
+                </details>
+                <details>
+                    <summary>Authors</summary>
+                    <!-- injects here -->
+                </details>
+            </div>
+            <div id="wikiContent" style="padding-top: 5%;">
+
+            </div>
+        </div>
+        <div style="padding: 18em"></div>
+    </body>
+    <button id="scrollToTopButton" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">Scroll to Top</button>
+    <footer id="footer">
+        <p style="text-align: center;">
+            &copy; 2023-2023 The Final Republic, FinalRepublic | Not an offical Minecraft product. Not approved by or associated with Mojang.
+            <a href="contact.html">Contact, Legal, About</a>, <a onclick="document.getElementById('footer').style.display = 'none';">Click to hide</a>
+        </p>
+    </footer>
+    <script>
+        function insertTag() {
+
+        }
+
+        window.addEventListener('scroll', function() {
+            // get the threshold, scroll pos, and id of button
+            var threshold = 0.05 * document.documentElement.scrollHeight;
+            var scrollPosition = window.scrollY || window.pageYOffset;
+            const scrollToTopButton = document.getElementById('scrollToTopButton');
+    
+            // magic the button into existence
+            if (scrollPosition > threshold) {
+                scrollToTopButton.style.display = 'block';
+            } else {
+                scrollToTopButton.style.display = 'none';
+            }
+        });
+
+        fetch('./wikiPages/wiki.json')
+            .then(response => response.text())
+            .then(data => {
+                oldData = JSON.parse(data)
+                let lang = "en-us"
+
+                for (let index = 0; index < oldData.pages[lang].length; index++) {
+                    fetch(`./wikiPages/${lang}/${oldData.pages[lang][index]}`)
+                        .then(response => response.text())
+                        .then(data => {
+
+                            // checks if the article text contains the <meta> tag
+                            // only used in error messages or complex articles, of which can be excluded
+                            if (!data.includes("<meta")) {
+
+                                // loading article
+                                let articleElement = document.getElementById('wikiContent')
+                                let ele = document.createElement("article");
+                                ele.innerHTML = data;
+                                ele.id = oldData.pages[lang][index].split(".")[0]; // a fine italian dish this is *chef's kiss*
+                                articleElement.appendChild(ele);
+
+                                // link validity on the loaded wiki page
+                                var links = ele.querySelectorAll('a');
+                                for(var i = 0; i < links.length; i++) {
+                                    let href = links[i].getAttribute('href')
+                                    if (href.includes("#")) { // line will throw an error when loading the footer's HREF value. please ignore.
+                                        // get href of the link minus the #
+                                        var articleId = links[i].getAttribute('href').substring(1);
+                                        // check if the article exists
+                                        var articleExists = document.getElementById(articleId) !== null;
+                                        // update tooltip
+                                        if (articleExists) {
+                                            links[i].title = links[i].innerText + "\nClick to Visit Article";
+                                        } else {
+                                            links[i].title = links[i].innerText + "\nArticle Does Not Exist";
+                                            links[i].style.color = "rgb(256, 64, 64)";
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                };
+                
+                // number of articles now updates automatically
+                document.getElementById("numberOfArticles").innerHTML = "Number Of Articles : " + document.querySelectorAll("article").length;
+                // to fix a graphical bug on page load
+                document.getElementById("numberOfSuccesses").innerHTML = "Number Of Results for \"\" : " + document.querySelectorAll("article").length;
+            });
+    </script>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <!-- discord embed integration -->
+        <meta content="Final Republic" property="og:site_name">
+        <meta content="Home | Final Republic" property="og:title">
+        <meta content="The Final Republic Website." property="og:description">
+        <meta content="https://cdn.discordapp.com/attachments/1061516148325220455/1074527045561884722/f7bd4c45-d74b-405c-b57c-852917af9cc7.png" property='og:image'>
+        <meta name="theme-color" content="#f0fff0">
+
+        <!-- make the website look good -->
+        <title>Home | Final Republic</title>
+        <link id="themeStylesheet" rel="stylesheet" href="light.css">
+        <script src="clientFunctions.js"></script>
+
+        <!-- mobile support, keep this at the end of <head> so it can override the loaded stylesheet -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    </head>
+    <body id="body">
+        <div style="padding: 12%;"><!-- breaks site if removed!!! --></div>
+        <div class="center">
+            <nav class="tab" style="background-image: none;">
+                <img src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:8%;">
+                <div class="topnav">
+                    <a class="active" href="index.html">Home</a>
+                    <a href="wiki.html">Wiki</a>
+                    <a href="map.html">Map</a>
+                    <a href="about.html">About</a>
+                </div>
+                <img class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:8%; max-height: 8%;">
+                <p id="splashText" class="splashText"></p>
+                <script>
+                    const splashValues = ["Quite the rarity 'init?","\"We are going to have some downtime\"","Now on 1.19.4!"]
+                    const splashSizes = [17, 10, 19]
+                    const splashNumber = Math.min(Math.floor(Math.random() * 10), splashValues.length - 1)
+                    const splashText = document.getElementById('splashText')
+                    splashText.innerHTML = splashValues[splashNumber]
+                    splashText.style.fontSize = `${splashSizes[splashNumber]}px`;
+                </script>
+            </nav>
+
+            <div class="donations">
+                <h3>Donations needed to keep running:</h3>
+                <p>NaN out of $NaNusd</p>
+                <p style="font-size: 10px;">
+                    Resets at the beginning of the month when services are paid.
+                    You will not get any perks or ranks on the server.
+                    We will accept refunds if you request one.
+                    May not be available in some countries.
+                    Honestly, just save your money if you can. Not worth it unless you <i>really</i> like this server.<br>
+                </p>
+                <form action="https://www.paypal.com/donate" method="post" target="_top">
+                    <input type="hidden" name="business" value="A3M6AQT7FX9EW" />
+                    <input type="hidden" name="no_recurring" value="0" />
+                    <input type="hidden" name="currency_code" value="USD" />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+                    <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+                </form>
+            </div>
+
+            <h1 style="padding: none;">The Final Republic Website</h1>
+            <p>
+                Welcome to the offical Final Republic Website.<br>
+                Here is the wiki, world map, and a few extra tools for players of the server. 
+                This site is currently in public beta, so please report any bugs to the devs.
+            </p>
+            <h2>Some Quick History</h2>
+            <p>
+                Final Republic was made out of a want for a relatively peaceful, survival building server; and over around 2 years of uptime, it was achieved with great success.
+                And while this server is based around building towns and small drama between them, overall it has grown to have over 50 unique players join.
+                I'm not going to go on about the history of the server here, why dont you go ahead and look at <a href="wiki.html">the Wiki</a> for more info.
+            </p>
+        </div>
+    </body>
+    <footer id="footer">
+        <p style="text-align: center;">
+            &copy; 2023-2023 The Final Republic, FinalRepublic | Not an offical Minecraft product. Not approved by or associated with Mojang.
+            <a href="contact.html">Contact, Legal, About</a>, <a onclick="document.getElementById('footer').style.display = 'none';">Click to hide</a>
+        </p>
+    </footer>
+    <script>
+        // Main Page Script
+
+        // dark-light mode toggle
+        // different screenshots, same spot
+        document.getElementById("body").style = 'background-image: url(./assets/background.png); position: absolute; top: -20%; width: 100%; background-repeat: no-repeat;'
+    </script>
+</html>

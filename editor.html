@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wiki Editor | Final Republic</title>
+    <link id="themeStylesheet" rel="stylesheet" href="light.css">
+</head>
+<nav class="tab">
+    <img src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
+    <div class="topnav">
+        <a href="index.html">Home</a>
+        <a class="active" href="wiki.html">Wiki</a>
+        <a href="map.html">Map</a>
+        <a href="about.html">About</a>
+    </div>
+    <img class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:4%; max-height:4%;">
+</nav>
+<body>
+    <div class="center">
+        <h1>Final Republic Wiki Editor</h1>
+        <p>By participating in editing this wiki, you assume these clauses;</p>
+        <ul>
+            <li><b>Your ip will be publicly posted</b> in our Discord server, we use this to decern different people.</li>
+            <li>You can be banned/blocked from editing this wiki at any time; bombing the wiki will be an instant ip-ban.</li>
+            <li>Your changes must be grounded in fact or plausible rumor. Images and videos are your best bet for proof as they are hard to fake reliably.</li>
+            <li>Most, if not all VPNs, have been blocked due to your IP being a major part of making sure you are actually you.</li>
+            <li>The edit will be cleaned up and scanned for malicious scripts before being put up on the wiki.</li>
+            <li>If you find any issues with the last 2 points, please submit a ticket in the Discord server.</li>
+        </ul>
+        <p style="text-align: left; padding-left: 10%; padding-right: 10%;">
+            All of your changes are uploaded to the wiki immediately and are sent to out via a Discord webhook to our communications server, then saved on a publicly editable folder.<br>
+            You may create tools that allow you to edit the wiki faster/easier/how you like, the code for the server is <a href="">open-source</a>.<br>
+            I should also mention that this page will get a visual revamp soon, as although it functions as it needs to, it looks like crap and has wayyyyyy too much spaghetti code on the back end.
+        </p>
+
+        <div>
+            <h2>Page</h2>
+            <p>
+                The page id is what the page will be saved under.<br>
+                <code>.././en-us/cublak-view.html</code> is how the default setting of the selections would save.<br>
+                Selecting a language
+            </p>
+
+                <label id="customPageLabel" for="customPage" style="display: none;">Page</label>
+                <textarea id="customPageText" rows="1" cols="20" placeholder="new page id" style="display: none;"></textarea><br>
+
+                <label id="choosePageLabel" for="page">Page</label>
+                <select id="choosePageSelect" name="page">
+                    <option value="cublak-view">Cublak View</option>
+                </select><br>
+
+            <label for="page">Language</label>
+            <select name="lang" id="lang">
+                <option value="en-us">English (Simplified) | en-us</option>
+                <option value="special">Special Page | special</option>
+            </select><br>
+
+            <label for="page">Mode</label>
+            <select name="mode" id="mode">
+                <option value="Edit">Edit an existing page</option>
+                <option value="Add">Add a new page</option>
+            </select><br>
+        </div>
+
+        <div>
+            <h2>User</h2>
+            <p>
+                Your alias is what you will be counted under as an editor for the page,<br>
+                Your IP will be sent along with your alias to make a complete profile.<br>
+                It will look like <code>0.0.0.0/anon</code> or <code>208.234.78.9/blurple</code> on the page.
+            </p>
+            <a onclick="clickForIp()" id="userIpAddress" style="overflow: clip;">Your IP: Click to show</a><br>
+            <textarea id="alias" rows="1" cols="20" placeholder="Your username/alias"></textarea><br>
+        </div>
+
+        <div>
+            <h2>Content</h2>
+            <p>
+                Once you select a file to edit it will automatically show up here.
+            </p>
+            <textarea id="read" rows="30" cols="70" placeholder="Text here"></textarea><br>
+            <textarea id="notes" rows="15" cols="70" placeholder="Notes on your edits"></textarea><br>
+            <button onclick="webhooks();">Send to the other Editors!</button>
+        </div>
+    </div>
+</body>
+<footer id="footer">
+    <p style="text-align: center;">
+        &copy; 2023-2023 The Final Republic, FinalRepublic | Not an offical Minecraft product. Not approved by or associated with Mojang.
+        <a href="contact.html">Contact, Legal, About</a>, <a onclick="document.getElementById('footer').style.display = 'none';">Click to hide</a>
+    </p>
+</footer>
+<script>
+
+    document.getElementById('mode').addEventListener('change', function () {
+        var modeValue = this.value;
+        const choosePageLabel = document.getElementById('choosePageLabel');
+        const choosePageSelect = document.getElementById('choosePageSelect');
+        const customPageLabel = document.getElementById('customPageLabel');
+        const customPageText = document.getElementById('customPageText');
+
+        if (modeValue == "Add") {
+            choosePageLabel.style.display = 'none';
+            choosePageSelect.style.display = 'none';
+            customPageLabel.style.display = '';
+            customPageText.style.display = '';
+        }
+        if (modeValue == "Edit") {
+            choosePageLabel.style.display = '';
+            choosePageSelect.style.display = '';
+            customPageLabel.style.display = 'none';
+            customPageText.style.display = 'none';
+        }
+    });
+
+    async function clickForIp() {
+        document.getElementById('userIpAddress').innerHTML = `Your IP: loading...`
+        let setIpForUserTemp = await returnIp();
+        document.getElementById('userIpAddress').innerHTML = `Your IP: ${setIpForUserTemp[0]}`
+    }
+
+
+    function hexToDecimal(hex) {
+        return parseInt(hex.replace("#", ""), 16)
+    }
+
+    function genHexString(len) {
+        const hex = '0123456789ABCDEF';
+        let output = '';
+        for (let i = 0; i < len; ++i) {
+            output += hex.charAt(Math.floor(Math.random() * hex.length));
+        }
+        return output;
+    }
+
+    async function getBlockedIps() {
+        try {
+            let response = await fetch('https://raw.githubusercontent.com/X4BNet/lists_vpn/main/output/vpn/ipv4.txt');
+            let data = await response.text();
+
+            data = data.split('\n');
+            for (let i = 0; i < data.length; i++) {
+                data[i] = data[i].split("/")[0];
+            }
+
+            return data
+        } catch (error) {
+            console.error('Error:', error);
+            return [];
+        }
+    }
+
+    async function returnIp(alias) {
+        if (!(alias === 'anon')) {
+            try {
+                let response = await fetch('https://api.ipify.org?format=json');
+                let data = await response.json();
+                let blockedIps = await getBlockedIps();
+                if (blockedIps.includes(data.ip)) { return [`This editor's ip (${data.ip}) has been blocked.`, 2] };
+                return [data.ip, 0];
+            } catch (error) {
+                console.error('Error:', error);
+                return ["Error while handling IP Address", 1];
+            }
+        }
+        return ["This editor has been IP-Excused.", 1]
+    }
+
+    async function webhook() {
+
+        let userIp = await returnIp(document.getElementById('alias').value)
+        let editId = `${document.getElementById('mode').value}-${genHexString(16)}`
+
+        let editName = `IP: ${userIp[0]} | Alias: ${document.getElementById('alias').value}`
+        let editUser = `Final Republic Wiki (${editId})`
+        let editTitle = `Page: ${document.getElementById('page').value} | Mode: ${document.getElementById('mode').value} | Id: ${editId} | Lang: ${document.getElementById('lang').value}`
+        let editNotes = `**Notes from the Editor:** \n${document.getElementById('notes').value}`
+
+        // send info embed
+        var xml = new XMLHttpRequest();
+        xml.open("POST", webhookURL, true);
+        xml.setRequestHeader('Content-Type', 'application/json');
+        xml.send(JSON.stringify({
+            username: editUser,
+            embeds: [
+                {
+                    author: {
+                        name: editName
+                    },
+                    title: editTitle,
+                    description: editNotes,
+                    color: hexToDecimal("#88ff00")
+                }
+            ]
+        }));
+
+        // send html file
+        let fileContent = document.getElementById("read").value;
+        if (fileContent == "" || userIp[1] == 2) {
+            alert(`Success! Your suggestion has been sent to the rest of the editors.\nYour edit id is: ${editId}.`)
+            return
+        }
+
+        let blob = new Blob([fileContent], { type: 'text/html' });
+        let file = new File([blob], `${document.getElementById('page').value}.html`, { type: 'text/html' });
+        var formData = new FormData();
+        formData.append("file", file);
+        formData.append("username", editUser)
+
+        var xml = new XMLHttpRequest();
+        xml.open("POST", webhookURL, true);
+        xml.send(formData);
+    }
+</script>
+</html>

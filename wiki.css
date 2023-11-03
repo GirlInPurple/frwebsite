@@ -1,0 +1,189 @@
+/* local override for the wiki only */
+.tag {
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    white-space: nowrap;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+input[type="text"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+input[type="text"]:focus {
+    border-color: #15ff00;
+}
+
+/* Style for all default buttons */
+button {
+    background-color: #00bb00;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* Hover effect for buttons */
+button:hover {
+    background-color: #00b31b;
+}
+
+/* Active (clicked) state for buttons */
+button:active {
+    background-color: #003973;
+}
+
+#scrollToTopButton {
+    /* Used by the "scroll up" button */
+    display: none;
+    position: fixed;
+    bottom: 7%;
+    right: 2%;
+    padding: 10px 20px;
+    font-size: 18px;
+    background: #d5d5d5;
+    color: #000;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+article img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    box-shadow: inset #202020;
+}
+
+article {
+    border: 1px solid #a8a8a8;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #dadada;
+    /* Darker background for articles */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    /* Darker box shadow */
+}
+
+article h2 {
+    color: #3b3b3b;
+    margin-bottom: 10px;
+}
+
+article p {
+    color: #202020;
+    /* Slightly lighter text color */
+}
+
+article ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+article li {
+    color: #5e5e5e;
+    /* Slightly lighter text color */
+}
+
+article a {
+    color: #189825;
+    /* Light link color */
+    text-decoration: none;
+}
+
+article a:hover {
+    text-decoration: underline;
+}
+
+article h3 {
+    color: #189825;
+    /* Light link color */
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 0.5em 0.5em 0;
+}
+
+summary {
+    font-weight: bold;
+    margin: -0.5em -0.5em 0;
+    padding: 0.5em;
+    /* highlighting is annoying so i disabled the color of it */
+    user-select: none;
+    -moz-user-select: none;
+}
+
+details[open] {
+    padding: 0.5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 0.5em;
+}
+
+/* colors for the tags */
+.tag-red {
+    background-color: rgba(255, 23, 23, 0.5);
+}
+
+.tag-blue {
+    background-color: rgba(23, 209, 255, 0.5);
+}
+
+.tag-green {
+    background-color: rgba(23, 255, 46, 0.5);
+}
+
+.tag-pink {
+    background-color: rgba(255, 23, 236, 0.5);
+}
+
+.tag-purple {
+    background-color: rgba(162, 0, 255, 0.5);
+}
+
+.tag-orange {
+    background-color: rgba(255, 165, 0, 0.5);
+}
+
+.tag-yellow {
+    background-color: rgba(255, 255, 23, 0.5);
+}
+
+.tag-cyan {
+    background-color: rgba(0, 247, 255, 0.5);
+}
+
+.tag-teal {
+    background-color: rgba(0, 128, 128, 0.5);
+}
+
+.tag-grey {
+    background-color: rgba(133, 133, 133, 0.5);
+}
+
+.tag-white {
+    background-color: rgba(187, 187, 187, 0.59);
+}

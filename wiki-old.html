@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <!-- discord embed integration -->
+        <meta content="Final Republic" property="og:site_name">
+        <meta content="Wiki | Final Republic" property="og:title">
+        <meta content="The wiki pages for FinalRepublic, from everything between a cult about chickens to multiple a full scale wars." property="og:description">
+        <meta content="https://cdn.discordapp.com/attachments/1061516148325220455/1074527045561884722/f7bd4c45-d74b-405c-b57c-852917af9cc7.png" property='og:image'>
+        <meta name="theme-color" content="#f0fff0">
+
+        <!-- make the website look good -->
+        <title>Wiki | Final Republic</title>
+        <link id="themeStylesheet" rel="stylesheet" href="light.css">
+        <script src="clientFunctions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script> <!-- wiki library -->
+        <link id="themeStylesheet" rel="stylesheet" href="wiki.css"> <!-- wiki overrides -->
+
+        <!-- mobile support, keep this at the end of <head> so it can override the loaded stylesheet -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    </head>
+    <nav class="tab">
+        <img src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
+        <div class="topnav">
+            <a href="index.html">Home</a>
+            <a class="active" href="wiki.html">Wiki</a>
+            <a href="map.html">Map</a>
+            <a href="about.html">About</a>
+        </div>
+        <img class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:4%; max-height:4%;">
+    </nav>
+    <body id="body">
+        <div class="center" style="text-align: left;">
+            <h1><i><noscript>Your browser either does not support JavaScript or you have it turned off. This site wont work without it, please enable it!</noscript></i></h1>
+            <h1>The Final Republic Wiki</h1>
+            <h3 id="numberOfArticles"><h3>
+
+            <input type="text" id="searchInput" placeholder="Search for articles and tags..." autofocus>
+            <span class="tag tag-grey" onclick="document.getElementById('searchInput').value = null; searchInput.dispatchEvent(new Event('input'));">Click to Clear</span>
+            <br>
+
+            <p class="coolp"><a href="#wiki-guide">Wiki Guide</a> | <a href="wiki-edit.html">Wiki Editor</a></p>
+
+            <input type="checkbox" id="advancedFiltersToggle" name="Advanced Filters" onclick="toggleElementVisibility('advancedFiltersDiv');toggleFilterText();"/>
+            <label id="advancedFiltersText" for="advancedFiltersToggle">Enable Advanced Filters</label>
+    
+            <!-- Standard Filters -->
+            <p class="coolp">Topics</p>
+            <span class="tag tag-red" onclick="insertTag('#conflict ')">Conflict</span>
+            <span class="tag tag-blue" onclick="insertTag('#group ')">Group</span>
+            <span class="tag tag-green" onclick="insertTag('#location ')">Location</span>
+            <span class="tag tag-pink" onclick="insertTag('#characters ')">Characters</span>
+            <span class="tag tag-purple" onclick="insertTag('#guide ')">Guide</span>
+            <span class="tag tag-orange" onclick="insertTag('#main-page ')">Main Page</span>
+            <span class="tag tag-cyan" onclick="insertTag('#obscure ')">Obscure</span>
+    
+            <!-- Advanced Filters -->
+            <div id="advancedFiltersDiv" style="display: none;">
+                <p class="coolp">Years</p>
+                <span class="tag tag-red" onclick="insertTag('#pre-2021 ')">Pre-2021</span>
+                <span class="tag tag-blue" onclick="insertTag('#2021 ')">2021</span>
+                <span class="tag tag-green" onclick="insertTag('#2022 ')">2022</span>
+                <span class="tag tag-pink" onclick="insertTag('#2023 ')">2023</span>
+                <span class="tag tag-purple" onclick="insertTag('#2024 ')">2024</span>
+                <p class="coolp">Languages</p>
+                <span class="tag tag-red" onclick="insertTag('#english ')">English</span>
+                <span class="tag tag-blue" onclick="insertTag('#français ')">Français</span>
+                <span class="tag tag-green" onclick="insertTag('#हिंदी ')">हिंदी</span>
+                <span class="tag tag-pink" onclick="insertTag('#tiếngviệt ')">TiếngViệt</span>
+                <span class="tag tag-purple" onclick="insertTag('#кирилиця ')">кирилиця</span>
+                <span class="tag tag-orange" onclick="insertTag('#português ')">Português</span>
+                <p class="coolp">Extra topics</p>
+                <span class="tag tag-red" onclick="insertTag('#abandoned ')">Abandoned</span>
+                <span class="tag tag-green" onclick="insertTag('#current ')">Current</span>
+                <span class="tag tag-pink" onclick="insertTag('#recently-updated ')">Recently Updated</span>
+                <span class="tag tag-purple" onclick="insertTag('#unfinished-pages ')">Unfinished Pages</span>
+                <p class="coolp">Page Authors</p>
+                <span class="tag tag-blurple" onclick="insertTag('#djzombiehunter ')">DJzombiehunter</span>
+                <span class="tag tag-grey" onclick="insertTag('#ousmblueninja ')">OusmBlueNinja</span>
+                <span class="tag tag-lak" onclick="insertTag('#alakazam6898 ')">Alakazam6898</span>
+                <span class="tag tag-grey" onclick="insertTag('#toxictrapper ')">ToxicTrapper</span>
+                <span class="tag tag-grey" onclick="insertTag('#anhnguyenlost13 ')">AnhNguyenlost13</span>
+            </div>
+            <br><br>
+            <h3 id="numberOfSuccesses"></h3>
+            <div id="wikiContent">
+
+            </div>
+        </div>
+        <div style="padding: 100px;"></div>
+    </body>
+    <button id="scrollToTopButton" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">Scroll to Top</button>
+    <footer id="footer">
+        <p style="text-align: center;">
+            &copy; 2023-2023 The Final Republic, FinalRepublic | Not an offical Minecraft product. Not approved by or associated with Mojang.
+            <a href="contact.html">Contact, Legal, About</a>, <a onclick="document.getElementById('footer').style.display = 'none';">Click to hide</a>
+        </p>
+    </footer>
+    <script>
+        // This code uses only pure javascript. Please do not use Jquery of any other library (yet) - blurple
+
+        // get the needed element
+        const articleElement = document.getElementById("wikiContent");
+        // load the converter
+        const converter = new showdown.Converter();
+        // load the markdown file
+
+        var list = ["cublak-view"];
+        var lang = "en-us"
+        for (let index = 0; index < list.length; index++) {
+            fetch('./wikiPages/'+lang+'/'+list[index]+'.html')
+                .then(response => response.text())
+                .then(data => {
+                    // data correction
+                    console.log(data);
+
+                    // checks if the article text contains the <meta> tag
+                    // only used in error messages or complex articles, of which can be excluded
+                    if (!data.includes("<meta")) {
+
+                        // loading article
+                        var ele = document.createElement("article");
+                        ele.innerHTML = data;
+                        ele.id = list[index];
+                        articleElement.appendChild(ele);
+
+                        // link validity on the loaded wiki page
+                        var links = ele.querySelectorAll('a');
+                        for(var i = 0; i < links.length; i++) {
+                            let href = links[i].getAttribute('href')
+                            if (href.includes("#")) { // line will throw an error when loading the footer's HREF value. please ignore.
+                                // get href of the link minus the #
+                                var articleId = links[i].getAttribute('href').substring(1);
+                                // check if the article exists
+                                var articleExists = document.getElementById(articleId) !== null;
+                                // update tooltip
+                                if (articleExists) {
+                                    links[i].title = links[i].innerText + "\nClick to Visit Article";
+                                } else {
+                                    links[i].title = links[i].innerText + "\nArticle Does Not Exist";
+                                    links[i].style.color = "rgb(256, 64, 64)";
+                                }
+                            }
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            // number of articles now updates automatically
+            document.getElementById("numberOfArticles").innerHTML = "Number Of Articles : " + document.querySelectorAll("article").length;
+            // to fix a graphical bug on page load
+            document.getElementById("numberOfSuccesses").innerHTML = "Number Of Results for \"\" : " + document.querySelectorAll("article").length;
+            
+        }
+    
+        function toggleFilterText() {
+
+            let filterTextId = document.getElementById("advancedFiltersText");
+
+            if (filterTextId.innerHTML == "Enable Advanced Filters") {
+                filterTextId.innerHTML = "Disable Advanced Filters"
+            } else if (filterTextId.innerHTML == "Disable Advanced Filters") {
+                filterTextId.innerHTML = "Enable Advanced Filters"
+            } else {
+                console.error("couldnt change text of filterTextId")
+            }
+        }
+
+
+        // original by ousmblueninja, rewrite by djzombiehunter
+        // i made the code more compact and fixed a bug where multiple tags would only register the first one
+        document.getElementById("searchInput").addEventListener("input", function () {
+    
+            // artifical loading time, also fixes a graphical issue with highlighting
+            let tempCooldown = Math.floor(Math.random()*500)
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(() => {
+    
+                var searchQueries = this.value.toLowerCase().trim().split(' ');
+                var articles = document.querySelectorAll("article");
+    
+                // repeat for how many articles there are
+                for (let i = 0; i < articles.length; i++) {
+                    // finds all elements you can search into
+                    var article = articles[i];
+                    var titleElement = article.querySelector("h2");
+                    var contentElements = article.querySelectorAll("p");
+                    var tags = Array.from(article.querySelectorAll(".tag")).map(tag => tag.textContent.toLowerCase());
+    
+                    // change title of page to lowercase to help with search results
+                    var title = titleElement.textContent.toLowerCase();
+                    var content = article.textContent.toLowerCase();
+    
+                    // check if all the search queries are present in either the title, content, or tags
+                    var allQueriesMatch = searchQueries.every(query => {
+                        var isTagSearch = query.startsWith("#");
+                        if (isTagSearch) {
+                            query = query.substring(1);
+                            return tags.includes(query);
+                        } else {
+                            return title.includes(query) || content.includes(query);
+                        }
+                    });
+    
+                    // show or hide the article based on matches
+                    article.style.display = allQueriesMatch ? "block" : "none";
+    
+                    // highlight the search queries in the title and content
+                    // this code is broken and makes <a> elements stop working due to how it handles classes
+                    // please change this.
+                    /*
+                    if (allQueriesMatch) {
+                        searchQueries.forEach(query => {
+                            var regex = new RegExp(query, 'gi');
+                            titleElement.innerHTML = titleElement.textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
+                            contentElements.forEach(contentElement => {
+                                contentElement.innerHTML = contentElement.textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
+                            });
+                        });
+                    }
+                    */
+                }
+                // finds all visible article elements
+                var visibleCount = 0;
+                for (let i = 0; i < articles.length; i++) {
+                    if (articles[i].offsetWidth > 0 && articles[i].offsetHeight > 0) {
+                        visibleCount++;
+                    }
+                }
+                document.getElementById("numberOfSuccesses").innerHTML = "Number Of Results for \""+this.value+"\" : " + visibleCount;
+            }, tempCooldown ); // Delay in milliseconds
+        });
+    
+        // sets the language on page reload to whatever language is in that region and is compatable with the wiki
+        /*
+        disabled while im working on the pages caues it keeps messing with the visiblity of them
+    
+        const compatibleLanguages = ["english","français","हिंदी","Tiếng Việt","кирилиця","Português"]
+        const languageMap = {
+            'en-US': 'english',
+            'fr': 'français',
+            'hi': 'हिंदी',
+            'vi': 'Tiếng Việt',
+            'ru': 'кирилиця',
+            'pt': 'Português'
+        };
+        const userLanguage = window.navigator.userLanguage || window.navigator.language;
+            const userLanguageTag = languageMap[userLanguage];
+    
+            try {
+                if (compatibleLanguages.includes(userLanguageTag)) {
+                    insertTag('#' + userLanguageTag + ' ');
+                }
+            }
+            catch {
+                console.error("error with adding language to search bar, defaulting to english")
+                insertTag('#english ');
+            }
+        */
+    </script>
+</html>

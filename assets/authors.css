@@ -1,0 +1,35 @@
+.tag-anon {
+    /* please use this format when creating your custom tag, if not for easier tweaking and backwards compat */
+    --blurple-left: rgb(128, 64, 64);
+    --blurple-middle: rgb(255, 255, 255);
+    --blurple-right: rgb(0, 128, 255);
+    background: -webkit-linear-gradient(left, var(--blurple-left), var(--blurple-middle), var(--blurple-right));
+    background: -moz-linear-gradient(left, var(--blurple-left), var(--blurple-middle), var(--blurple-right));
+    background: -ms-linear-gradient(left, var(--blurple-left), var(--blurple-middle), var(--blurple-right));
+    background: -o-linear-gradient(left, var(--blurple-left), var(--blurple-middle), var(--blurple-right));
+    background: linear-gradient(to right, var(--blurple-left), var(--blurple-middle), var(--blurple-right));
+}
+
+.tag-lak {
+    /* please use this format when creating your custom tag, if not for easier tweaking and backwards compat */
+    --lak-left: blue;
+    --lak-middle: rgb(161, 116, 151);
+    --lak-right: red;
+    background: -webkit-linear-gradient(left, var(--lak-left), var(--lak-middle), var(--lak-right));
+    background: -moz-linear-gradient(left, var(--lak-left), var(--lak-middle), var(--lak-right));
+    background: -ms-linear-gradient(left, var(--lak-left), var(--lak-middle), var(--lak-right));
+    background: -o-linear-gradient(left, var(--lak-left), var(--lak-middle), var(--lak-right));
+    background: linear-gradient(to right, var(--lak-left), var(--lak-middle), var(--lak-right));
+}
+
+.tag-blurple {
+    /* please use this format when creating your custom tag, if not for easier tweaking and backwards compat */
+    --blurple-left: rgb(66, 0, 125);
+    --blurple-middle: rgb(94, 1, 128);
+    --blurple-right: rgb(128, 9, 133);
+    background: -webkit-linear-gradient(left, var(--blurple-left), var(--blurple-middle), var(--blurple-right));
+    background: -moz-linear-gradient(left, var(--blurple-left), var(--blurple-middle), var(--blurple-right));
+    background: -ms-linear-gradient(left, var(--blurple-left), var(--blurple-middle), var(--blurple-right));
+    background: -o-linear-gradient(left, var(--blurple-left), var(--blurple-middle), var(--blurple-right));
+    background: linear-gradient(to right, var(--blurple-left), var(--blurple-middle), var(--blurple-right));
+}

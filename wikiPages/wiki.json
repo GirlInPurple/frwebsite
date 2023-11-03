@@ -1,0 +1,48 @@
+{   
+    "lastUpdated":"245987",
+
+    "wikiSearching":{
+        "topics":{
+            "basic":[
+                "Conflicts",
+                "Groups",
+                "Locations",
+                "Characters",
+                "Main-Page"
+            ],
+            "misc":[
+                "Obscure",
+                "Abandoned",
+                "Current",
+                "Recent",
+                "Unfinshed"
+            ],
+            "years":[
+                "pre-2021",
+                "2021",
+                "2022",
+                "2023",
+                "2024"
+            ]
+        },
+        "languages":{
+            "English (Simplified)":"en-us",
+            "Special Pages":"special"
+        },
+        "authors":[
+            "DJzombiehunter",
+            "OusmBlueNinja",
+            "Alakazam6898",
+            "ToxicTrapper",
+            "AnhNguyenlost13"
+        ]
+    },
+    "pages":{
+        "en-us":[
+            "cublak-view.html"
+        ],
+        "special":[
+            "toaster.html"
+        ]
+    }
+}
