@@ -1,3 +1,9 @@
+/*
+ Copyright 2023 Final Republic contributors
+ Under GPL v3 license
+ Most of this code isnt mine anyway, thanks stackoverflow
+*/
+
 const sanitizeHtml = require('sanitize-html');
 const dotenv = require('dotenv'); dotenv.config(); // get the .env file working
 const http = require('http');
@@ -5,7 +11,7 @@ const url = require('url');
 const fs = require('fs');
 const os = require('os');
 
-const listenPort = process.env.PORT ?? 8080;
+const listenPort = process.env.PORT ?? 8080; // fl0 injects port into the docker container; uses that port unless it cant be found
 
 function hexToDecimal(hex) {
     return parseInt(hex.replace("#", ""), 16)
