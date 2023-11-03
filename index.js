@@ -5,6 +5,8 @@ const url = require('url');
 const fs = require('fs');
 const os = require('os');
 
+const listenPort = process.env.PORT ?? 8080;
+
 function hexToDecimal(hex) {
     return parseInt(hex.replace("#", ""), 16)
 }
@@ -218,4 +220,4 @@ http.createServer(async function (req, res) {
         });
     } else 
     { response.writeHead(405, { 'Content-Type': 'text/plain' }).end(); };
-}).listen(80);
+}).listen(listenPort);
