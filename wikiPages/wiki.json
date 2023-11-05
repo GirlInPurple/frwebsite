@@ -1,6 +1,14 @@
 {   
     "lastUpdated":"245987",
-
+    "pages":{
+        "en-us":[
+            "cublak-view.html"
+        ],
+        "special":[
+            "toaster.html"
+        ]
+    },
+    
     "wikiSearching":{
         "topics":{
             "basic":[
@@ -35,14 +43,6 @@
             "Alakazam6898",
             "ToxicTrapper",
             "AnhNguyenlost13"
-        ]
-    },
-    "pages":{
-        "en-us":[
-            "cublak-view.html"
-        ],
-        "special":[
-            "toaster.html"
         ]
     }
 }

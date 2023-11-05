@@ -7,8 +7,8 @@
         <meta content="Final Republic" property="og:site_name">
         <meta content="Map | Final Republic" property="og:title">
         <meta content="Final Republic's World Map. Hosted using the Bluemap plugin." property="og:description">
-        <meta content="https://cdn.discordapp.com/attachments/1061516148325220455/1074527045561884722/f7bd4c45-d74b-405c-b57c-852917af9cc7.png" property='og:image'>
-        <meta name="theme-color" content="#f0fff0">
+        <meta content="./assets/FinalRepublic_GIF_logo.gif" property='og:image'>
+        <meta name="theme-color" content="#bd97bd">
 
         <!-- make the website look good -->
         <title>Wiki | Final Republic</title>
@@ -33,16 +33,29 @@
     </nav>
     <body id="body">
         <div class="center">
-            <p>Template Page</p>
+            <p>Template Page; do not delete under any circumstances. Click <a href="index.html">Here</a> to go back home.</p>
         </div>
     </body>
     <footer id="footer">
         <p style="text-align: center;">
-            | &copy; 2023-2023 The Final Republic, FinalRepublic 
-            | GPL v3 ; Open to Contributors ; Hosted on <a href="https://github.com/GirlInPurple/frwebsite">Github</a> and <a href="https://www.fl0.com/">FL0</a> 
-            | Not an offical Minecraft product ; Not approved by or associated with Mojang 
-            | <a href="contact.html">Contact, Legal, About</a>.
+            | &copy; 2022-2023 The Final Republic, FinalRepublic
+            | GPL v3 ; Open to Contributors ; Hosted on <a href="https://github.com/GirlInPurple/frwebsite">Github</a> and <a href="https://www.fl0.com/">FL0</a> ; Last Updated <a id="commitDate"></a>
+            | Not an offical Minecraft product ; Not approved by or associated with Mojang Studios
+            | <a href="contact.html">Contact, Legal, About</a>
             | <a onclick="document.getElementById('footer').style.display = 'none';">Click here to hide footer</a> |
         </p>
+        <script>
+            window.onload = async function(){
+                await getLatestCommit()
+            }
+            async function getLatestCommit() {
+                await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("commitDate").innerHTML = data[0].commit.author.date;
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        </script>
     </footer>
 </html>

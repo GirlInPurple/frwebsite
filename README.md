@@ -4,27 +4,33 @@ A complete rewrite of the Final Republic website, sharing as little code as poss
 
 This fork was created cause the old site and repo is a mess, and i don't want any overhead with developing the site anymore, being the other admins and Github Pages having no server-side support.
 
-Feel free to fork and add your own features, but there is no guarantee i will merge them.
+## contributing
 
-## plans
+Feel free to fork and add your own features, but there is no guarantee i will merge them. Please submit them as PRs, not full commits.
 
+## written plans
+
+- [ ] Update README.md
+  - [ ] Contributing Section
+  - [ ] Wiki Section
+  - [ ] Backend Explanation
 - [ ] Cleaning up CSS
-  - [ ] Consistent Theme
+  - [x] Consistent Theme
   - [ ] Mobile Support
-  - [ ] Fix the janky header
-- [ ] Account System
-  - [ ] Username/Password system
+  - [x] Fix the janky header
+- [ ] ~~Account~~ Alias System
+  - [ ] ~~Username/Password system~~
   - [ ] Playerhead in the corner using the [Minotar API](https://minotar.net/avatar/notch/100)
-  - [ ] New account page
+  - [ ] ~~New account page~~
 - [ ] Donation System
 - [ ] Wiki system
-  - [x] Make the Wiki Editor
+  - [ ] Make the Wiki Editor
   - [ ] Rewrite the Wiki's backend
-  - [ ] Intertwine it with the account system
+  - [ ] ~~Intertwine it with the account system~~
 - [ ] Clean up the file system
   - [ ] Have separate directories for images, styles, html, js, json, etc
 - [ ] Make it as small and clean as possible
-  - [ ] Have it be fast and small enough to run on 256mb of ram so it can run on even the cheapest of servers
+  - [x] Have it be fast and small enough to run on 256mb of ram so it can run on even the cheapest of servers (currently using [FL0](https://www.fl0.com/))
   - [ ] Small file footprint for more Wiki pages
 
 ## structure
@@ -73,19 +79,6 @@ here is a basic wiki page, using HTML format for now.
 
 Do not use any `<head>`,`<body>`, or `<html>` tags in the wiki page files, as it will break the site completely if that occurs. Any page that contains the `<meta>` tag will not display for security and technical reasons.
 
-### new page
-
-Please copy and paste this into the new file, then modify for your needs.
-
-```html
-
-```
-
-You can also clone another page and work off that instead.
-
 ### files
 
 if you need to add a file, like an image, video, or subtitles, add it to the [`assets`](./assets/) directory.
-
-If said file is a wiki page, add it to the [`wikiPages`](./wikiPages/) directory instead.
-Remember to follow the guide for writing new pages above, and put the page in the correct directory.

@@ -7,8 +7,8 @@
         <meta content="Final Republic" property="og:site_name">
         <meta content="Home | Final Republic" property="og:title">
         <meta content="The Final Republic Website." property="og:description">
-        <meta content="https://cdn.discordapp.com/attachments/1061516148325220455/1074527045561884722/f7bd4c45-d74b-405c-b57c-852917af9cc7.png" property='og:image'>
-        <meta name="theme-color" content="#f0fff0">
+        <meta content="./assets/FinalRepublic_GIF_logo.gif" property='og:image'>
+        <meta name="theme-color" content="#bd97bd">
 
         <!-- make the website look good -->
         <title>Home | Final Republic</title>
@@ -19,7 +19,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     </head>
-    <body id="body">
+    <body id="body" style="background-image: url(./assets/background.png); position: absolute; top: -20%; width: 100%; background-repeat: no-repeat; background-size: cover; background-attachment: fixed;">
         <div style="padding: 12%;"><!-- breaks site if removed!!! --></div>
         <div class="center">
             <nav class="tab" style="background-image: none;">
@@ -33,8 +33,8 @@
                 <img class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:8%; max-height: 8%;">
                 <p id="splashText" class="splashText"></p>
                 <script>
-                    const splashValues = ["Quite the rarity 'init?","\"We are going to have some downtime\"","Now on 1.19.4!"]
-                    const splashSizes = [17, 10, 19]
+                    const splashValues = ["Quite the rarity 'init?","\"We are going to have some downtime\"","Now on 1.19.4!","RIP Skele Horse, 2023-2023 :(","16 Towns Total!","ERROR 418: Teapot not found!"]
+                    const splashSizes = [17, 10, 19, 17, 18, 17]
                     const splashNumber = Math.min(Math.floor(Math.random() * 10), splashValues.length - 1)
                     const splashText = document.getElementById('splashText')
                     splashText.innerHTML = splashValues[splashNumber]
@@ -73,22 +73,35 @@
                 And while this server is based around building towns and small drama between them, overall it has grown to have over 50 unique players join.
                 I'm not going to go on about the history of the server here, why dont you go ahead and look at <a href="wiki.html">the Wiki</a> for more info.
             </p>
+            <h2>Links</h2>
+            <p>
+                FinalRepublic is on 3 platforms; <a href="wiki.html#youtube-channels">Youtube</a>, <a href="https://discord.gg/2PxCfY9jRd">Discord</a>, and <a href="">TBD</a>
+            </p>
         </div>
     </body>
     <footer id="footer">
         <p style="text-align: center;">
-            | &copy; 2023-2023 The Final Republic, FinalRepublic 
-            | GPL v3 ; Open to Contributors ; Hosted on <a href="https://github.com/GirlInPurple/frwebsite">Github</a> and <a href="https://www.fl0.com/">FL0</a> 
-            | Not an offical Minecraft product ; Not approved by or associated with Mojang 
-            | <a href="contact.html">Contact, Legal, About</a>.
+            | &copy; 2022-2023 The Final Republic, FinalRepublic
+            | GPL v3 ; Open to Contributors ; Hosted on <a href="https://github.com/GirlInPurple/frwebsite">Github</a> and <a href="https://www.fl0.com/">FL0</a> ; Last Updated <a id="commitDate"></a>
+            | Not an offical Minecraft product ; Not approved by or associated with Mojang Studios
+            | <a href="contact.html">Contact, Legal, About</a>
             | <a onclick="document.getElementById('footer').style.display = 'none';">Click here to hide footer</a> |
         </p>
+        <script>
+            window.onload = async function(){
+                await getLatestCommit()
+            }
+            async function getLatestCommit() {
+                await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("commitDate").innerHTML = data[0].commit.author.date;
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        </script>
     </footer>
     <script>
-        // Main Page Script
 
-        // dark-light mode toggle
-        // different screenshots, same spot
-        document.getElementById("body").style = 'background-image: url(./assets/background.png); position: absolute; top: -20%; width: 100%; background-repeat: no-repeat;'
     </script>
 </html>

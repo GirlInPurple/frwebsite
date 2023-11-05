@@ -1,7 +1,9 @@
 /*
- Copyright 2023 Final Republic contributors
- Under GPL v3 license
- Most of this code isnt mine anyway, thanks stackoverflow
+
+Copyright 2023 Final Republic contributors
+Under GPL v3 license
+Most of this code isnt mine anyway, thanks stackoverflow
+
 */
 
 const sanitizeHtml = require('sanitize-html');
@@ -26,20 +28,35 @@ function genHexString(len) {
     return output;
 }
 
-async function getBlockedIps() {
+async function getBlockedIps(ip) {
     try {
-        let response = await fetch('https://raw.githubusercontent.com/X4BNet/lists_vpn/main/output/vpn/ipv4.txt');
-        let data = await response.text();
+        let response
+        let data
 
+        // try VPN ip list
+        response = await fetch('https://raw.githubusercontent.com/X4BNet/lists_vpn/main/output/vpn/ipv4.txt');
+        data = await response.text();
         data = data.split('\n');
         for (let i = 0; i < data.length; i++) {
             data[i] = data[i].split("/")[0];
         }
+        if (ip in data) {
+            return false // false means unsafe
+        }
 
-        return data
+        // try get-ip-intel
+        response = await fetch(`https://www.getipintel.net/check.php?ip=${ip}&flags=m`); // https://www.getipintel.net/ open an issue to change the flags
+        data = await response.text();
+        if (data  === '1') {
+            return false // false means unsafe
+        }
+
+        // if it passes both checks;
+        return true // true means safe
+        
     } catch (error) {
-        console.error('Error:', error);
-        return [];
+        console.error(`An error has occured ; ${error} ; this user has been excused from the ip blocker`);
+        return true // you could cause an error to occur and get around the block, but its so unlikely that ill leave it alone
     }
 }
 
@@ -150,15 +167,31 @@ async function webhook() {
     xml.send(formData);
 }
 
+async function updateWikiJson() {
+    
+
+
+    let jsonPath = `./wikiPages/wiki.json`
+    fs.writeFile(jsonPath, data, function (err) {
+        console.error(`Error on updateWikiJson() ; ${err} ; aborting`)
+    });
+}
+
 // create the server
 http.createServer(async function (req, res) {
 
     if (req.method == 'POST') {
-        req.on('data', function (data) {
+        req.on('data', async function (data) {
             queryData += data;
+
+            // run safety checks here
+            // size check
             if (queryData.length > 1e6) {
-                queryData = "";
-                res.writeHead(413, { 'Content-Type': 'text/plain' }).end();
+                res.writeHead(413, "Request Too Large", { 'Content-Type': 'text/plain' }).end();
+                req.socket.destroy();
+            }
+            if (await getBlockedIps(req.socket.remoteAddress) === false) {
+                res.writeHead(403, "Forbidden", { 'Content-Type': 'text/plain' }).end();
                 req.socket.destroy();
             }
         });
@@ -175,23 +208,23 @@ http.createServer(async function (req, res) {
 
         // posting html files
         var filename = "." + q.pathname;
-        fs.readFile(filename, function (err, data) {
+        fs.readFile(filename, async function (err, data) {
 
             // error handling
+            // sends you to index.html if its an empty link
+            if (filename == "./") {
+                res.writeHead(200, "OK", { 'Content-Type': 'text/html' });
+                fs.readFile('./index.html', function (err, data) {
+                    res.write(data)
+                    res.end();
+                });
+            }
             if (err) {
-                // sends you to index.html if its an empty link
-                if (filename == "./") {
-                    res.writeHead(200, { 'Content-Type': 'text/html' });
-                    fs.readFile('./index.html', function (err, data) {
-                        res.write(data)
-                        return res.end();
-                    });
-                }
                 // sends you to error.html if it cant find the file you're looking for
-                res.writeHead(404, { 'Content-Type': 'text/html' });
+                res.writeHead(404, "File Not Found", { 'Content-Type': 'text/html' });
                 fs.readFile('./error.html', function (err, data) {
                     res.write(data)
-                    return res.end();
+                    res.end();
                 });
             }
 
@@ -205,21 +238,19 @@ http.createServer(async function (req, res) {
                 } else if (filename.endsWith('.json')) {
                     contentType = 'application/json';
                 }
-
-                console.log(filename)
+                
                 if (filename == "./wikiPages/wiki.json") {
                     let wikiJson = JSON.parse(data)
-                    console.log(wikiJson, wikiJson.lastUpdated)
-                    if (wikiJson.lastUpdated >= 0) {
-                        console.log("test success")
+                    if (wikiJson.lastUpdated < (Date.now()+(5*60))) {
+                        await updateWikiJson()
                     }
                 }
                 
 
                 // otherwise, post to client
-                res.writeHead(200, { 'Content-Type': contentType });
+                res.writeHead(200, "OK", { 'Content-Type': contentType });
                 res.write(data);
-                return res.end();
+                res.end();
             } catch {
 
             }

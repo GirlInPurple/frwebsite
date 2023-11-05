@@ -81,7 +81,7 @@ img.themeToggle {
     rotate: -25deg; 
     position:absolute; 
     top:3%; 
-    right:3%;
+    right:1.5%;
     animation-name: splashAnimation;
     animation-duration: 1s;
     animation-iteration-count: infinite;
