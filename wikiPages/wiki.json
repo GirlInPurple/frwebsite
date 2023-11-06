@@ -1,8 +1,14 @@
 {
-    "tags":["Location","Player","NPC"],
+    "tags":["Location","Player","NPC", "Conflict"],
     "years":["pre-2021","2021","2022","2023","2024"],
     "authors":["Anon","DJzombiehunter"],
     "pages":[
-        "cublak-view"
+        "cublak-view",
+        "map-triangulation",
+        "list-of-mountains",
+        "battle-origin-river",
+        "baystone",
+        "gscm",
+        "below-the-bedrock"
     ]
 }

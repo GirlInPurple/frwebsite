@@ -1,5 +1,5 @@
 # [Cublak View](#cublak-view)
-___Tags: <span class="tag tag-green">Location</span><span class="tag tag-blue">English</span><span class="tag tag-blurple">DJzombiehunter</span>___
+___Tags:<span class="tag tag-green">Location</span><span class="tag tag-pink">2023</span><span class="tag tag-blue">English</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 _This page has been translated into the following: [Français](#cublak-view-FR), [हिंदी](#cublak-view-ID)_
 
@@ -29,4 +29,3 @@ As of Late July 2023, construction of Cublak is indefinitely paused.
 
 *   The name Cublak View is made of 3 parts; Cube > Cub, Lakshyapowerman > Lak, Mountain View > View. It was a name idea that everyone just stuck with.
 *   This is one of the 4 original towns on the server; being Spawn City, Cublak View, Windswept Fang, and Nether Bay.
-    

@@ -90,7 +90,21 @@
         document.getElementById('searchInput').addEventListener('input', async function(){
                 await wikiSearchAlgor()
                 refreshNumberText()
-        })
+        });
+
+        window.addEventListener('scroll', function() {
+            // get the threshold, scroll pos, and id of button
+            var threshold = 0.05 * document.documentElement.scrollHeight;
+            var scrollPosition = window.scrollY || window.pageYOffset;
+            const scrollToTopButton = document.getElementById('scrollToTopButton');
+
+            // magic the button into existence
+            if (scrollPosition > threshold) {
+                scrollToTopButton.style.display = 'block';
+            } else {
+                scrollToTopButton.style.display = 'none';
+            }
+        });
 
         window.onload = async function(){
             let width = window.innerWidth;
@@ -131,8 +145,12 @@
                     var tags = Array.from(article.querySelectorAll(".tag")).map(tag => tag.textContent.toLowerCase());
 
                     // change title of page to lowercase to help with search results
-                    var title = titleElement.textContent.toLowerCase();
-                    var content = article.textContent.toLowerCase();
+                    try {
+                        var title = titleElement.textContent.toLowerCase();
+                        var content = article.textContent.toLowerCase();
+                    } catch (error) {
+                        console.error(`tried to lowercase some text; ${error}`)
+                    }
 
                     // check if all the search queries are present in either the title, content, or tags
                     var allQueriesMatch = searchQueries.every(query => {
@@ -206,6 +224,7 @@
             // show the needed article
             safeArticle.style.display = 'block';
             dashShow.style.display = 'block';
+            window.scrollTo({top: 0});
         }
 
         function linkHandling() {
@@ -259,20 +278,6 @@
             }
         }
 
-        window.addEventListener('scroll', function() {
-            // get the threshold, scroll pos, and id of button
-            var threshold = 0.05 * document.documentElement.scrollHeight;
-            var scrollPosition = window.scrollY || window.pageYOffset;
-            const scrollToTopButton = document.getElementById('scrollToTopButton');
-    
-            // magic the button into existence
-            if (scrollPosition > threshold) {
-                scrollToTopButton.style.display = 'block';
-            } else {
-                scrollToTopButton.style.display = 'none';
-            }
-        });
-
         async function startWikiSys(){
             await fetch('./wikiPages/wiki.json')
                 .then(response => response.text())
@@ -301,7 +306,6 @@
                                 eleSplice.id = `${wikiJsonData.pages[articleIndex].split(".")[0]}-splice`;
                                 eleSplice.style.fontSize = '10px'
                                 articleElement.appendChild(eleSplice);
-                                document.getElementById(`${wikiJsonData.pages[articleIndex].split(".")[0]}${wikiJsonData.pages[articleIndex].split(".")[0]}`.replace('-', '').replace('-', '')).style.fontSize = '30px';
                                 // loading fronting article
                                 eleFront.innerHTML = converter.makeHtml(data)
                                 eleFront.id = wikiJsonData.pages[articleIndex].split(".")[0];

@@ -212,7 +212,7 @@ http.createServer(async function (req, res) {
 
             // error handling
             // sends you to index.html if its an empty link
-            if (filename == "./") {
+            if (filename == "./" || filename == "/" || filename == "") {
                 res.writeHead(200, "OK", { 'Content-Type': 'text/html' });
                 fs.readFile('./index.html', function (err, data) {
                     res.write(data)
@@ -237,15 +237,7 @@ http.createServer(async function (req, res) {
                     contentType = 'application/javascript';
                 } else if (filename.endsWith('.json')) {
                     contentType = 'application/json';
-                }
-                
-                if (filename == "./wikiPages/wiki.json") {
-                    let wikiJson = JSON.parse(data)
-                    if (wikiJson.lastUpdated < (Date.now()+(5*60))) {
-                        await updateWikiJson()
-                    }
-                }
-                
+                }           
 
                 // otherwise, post to client
                 res.writeHead(200, "OK", { 'Content-Type': contentType });
