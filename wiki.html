@@ -38,7 +38,10 @@
     </nav>
     <body id="body">
         <div class="center">
-            <a id="showWhenArticle" href="wiki.html" style="display: none; ">< < < Return back to the Wiki</a>
+            <div id="showWhenArticle" style="display: none;">
+                <a onclick="toggleArticles(undefined, true)">< < < Return back to the Wiki</a><br>
+                <a id="lastViewed" onclick="toggleArticles('', true)" style="display: none;">< < < Return back to Last Viewed Page</a>
+            </div>
             <div id="hideWhenArticle">
                 <h1><i><noscript>Your browser either does not support JavaScript or you have it turned off. This site wont work without it, please enable it!</noscript></i></h1>
 
@@ -191,8 +194,9 @@
             }, tempCooldown ); // Delay in milliseconds
         }
 
-        function insertTag() {
-
+        function insertTag(inputTag) {
+            let searchInput = document.getElementById('searchInput')
+            searchInput.value = `${searchInput.value} #${inputTag}`
         }
 
         function refreshNumberText(){
@@ -202,29 +206,51 @@
             document.getElementById("numberOfSuccesses").innerHTML = `Number Of Results for \"${document.getElementById('searchInput').value}\" : ${document.querySelectorAll("article").length/2}`
         }
 
-        function toggleArticles(href) {
-            /*
-                this function is (almost) irreversible! 
-                you will need to back back to wiki.html when you are done! 
-                do not run this until is has to be!
-            */
+        function toggleArticles(href, show = false) { // spaghetti code
 
             // grab all the needed elements
             let articles = document.getElementsByTagName('article')
             let dashHide = document.getElementById('hideWhenArticle')
             let dashShow = document.getElementById('showWhenArticle')
-            let safeArticle = document.getElementById(href.replace('#', ''))
-            
+            let lastArticle = document.getElementById('lastViewed')
+            let errorArticle = document.getElementById('dead-links')
+
+            let safeArticle = '';
+            if (href == undefined) {
+                for(let i = 0; i < articles.length; i++) {
+                    if (articles[i].style.display == 'block') {
+                        safeArticle = articles[i];
+                        break;
+                    }
+                }
+            } else {
+                safeArticle = document.getElementById(href.replace('#', ''))
+            }
+
             // hide EVERYTHING
             dashHide.style.display = 'none'
             for(let i = 0; i < articles.length; i++) {
                 articles[i].style.display = 'none';
             }
-            console.log(href)
+
             // show the needed article
-            safeArticle.style.display = 'block';
+            try {safeArticle.style.display = 'block';} catch(error) {console.error(error); errorArticle.style.display = 'block';}
             dashShow.style.display = 'block';
             window.scrollTo({top: 0});
+
+            if (show != false) {
+                try {safeArticle.style.display = 'none';} catch(error) {console.error(error); errorArticle.style.display = 'block';}
+                dashHide.style.display = 'block'
+                dashShow.style.display = 'none';
+                for(let i = 0; i < articles.length; i++) {
+                    if (articles[i].id.includes('splice')) {
+                        articles[i].style.display = 'block';
+                    } else {
+                        articles[i].style.display = 'none';
+                    }
+                }
+            }
+
         }
 
         function linkHandling() {

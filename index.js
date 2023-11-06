@@ -7,13 +7,18 @@ Most of this code isnt mine anyway, thanks stackoverflow
 */
 
 const sanitizeHtml = require('sanitize-html');
-const dotenv = require('dotenv'); dotenv.config(); // get the .env file working
+const FormData = require('form-data');
+const dotenv = require('dotenv');
+const axios = require('axios');
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
 const os = require('os');
 
-const listenPort = process.env.PORT ?? 8080; // fl0 injects port into the docker container; uses that port unless it cant be found
+// fl0 injects port into the docker container; uses that port unless it cant be found
+dotenv.config();
+const listenPort = process.env.PORT ?? 8080;
+const webhookURL = process.env.WEBHOOK
 
 function hexToDecimal(hex) {
     return parseInt(hex.replace("#", ""), 16)
@@ -47,13 +52,13 @@ async function getBlockedIps(ip) {
         // try get-ip-intel
         response = await fetch(`https://www.getipintel.net/check.php?ip=${ip}&flags=m`); // https://www.getipintel.net/ open an issue to change the flags
         data = await response.text();
-        if (data  === '1') {
+        if (data === '1') {
             return false // false means unsafe
         }
 
         // if it passes both checks;
         return true // true means safe
-        
+
     } catch (error) {
         console.error(`An error has occured ; ${error} ; this user has been excused from the ip blocker`);
         return true // you could cause an error to occur and get around the block, but its so unlikely that ill leave it alone
@@ -121,21 +126,14 @@ async function readSanitizeWrite(file, newValue) {
     });
 }
 
-async function webhook() {
+async function webhook(alias, ip, page, editId, notes, fileContent) {
 
-    let userIp = await returnIp(document.getElementById('alias').value)
-    let editId = `${document.getElementById('mode').value}-${genHexString(16)}`
-
-    let editName = `IP: ${userIp[0]} | Alias: ${document.getElementById('alias').value}`
+    let editName = `IP: ${ip} | Alias: ${alias}`
     let editUser = `Final Republic Wiki (${editId})`
-    let editTitle = `Page: ${document.getElementById('page').value} | Mode: ${document.getElementById('mode').value} | Id: ${editId} | Lang: ${document.getElementById('lang').value}`
-    let editNotes = `**Notes from the Editor:** \n${document.getElementById('notes').value}`
+    let editTitle = `Page: \`${page}\` | Id: ${editId}`
+    let editNotes = `**Notes from the Editor:** \n${notes}`
 
-    // send info embed
-    var xml = new XMLHttpRequest();
-    xml.open("POST", webhookURL, true);
-    xml.setRequestHeader('Content-Type', 'application/json');
-    xml.send(JSON.stringify({
+    const data = {
         username: editUser,
         embeds: [
             {
@@ -144,31 +142,52 @@ async function webhook() {
                 },
                 title: editTitle,
                 description: editNotes,
-                color: hexToDecimal("#88ff00")
+                color: hexToDecimal("#88ff00"),
+                "thumbnail": {
+                    "url": `https://minotar.net/avatar/${alias}/100`
+                }
             }
         ]
-    }));
+    };
+
+    axios({
+        method: 'post',
+        url: webhookURL, // replace with your webhook URL
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: data
+    }).then((response) => {
+        console.log(`Response: ${response}`);
+    }).catch((error) => {
+        console.error(`Problem with request: ${error.message}`);
+    });
 
     // send html file
-    let fileContent = document.getElementById("read").value;
-    if (fileContent == "" || userIp[1] == 2) {
-        alert(`Success! Your suggestion has been sent to the rest of the editors.\nYour edit id is: ${editId}.`)
+    if (fileContent == "") {
         return
     }
 
-    let blob = new Blob([fileContent], { type: 'text/html' });
-    let file = new File([blob], `${document.getElementById('page').value}.html`, { type: 'text/html' });
-    var formData = new FormData();
-    formData.append("file", file);
-    formData.append("username", editUser)
+    let filename = `${page}.md`;
+    let formData = new FormData();
+    formData.append("file", fs.createReadStream(filename), {
+        filename: filename,
+        contentType: 'text/html',
+    });
 
-    var xml = new XMLHttpRequest();
-    xml.open("POST", webhookURL, true);
-    xml.send(formData);
+    formData.append("username", editUser);
+
+    axios.post(webhookURL, formData, {
+        headers: formData.getHeaders()
+    }).then((response) => {
+        console.log(response);
+    }).catch((error) => {
+        console.error(error);
+    });
 }
 
 async function updateWikiJson() {
-    
+
 
 
     let jsonPath = `./wikiPages/wiki.json`
@@ -180,29 +199,54 @@ async function updateWikiJson() {
 // create the server
 http.createServer(async function (req, res) {
 
-    if (req.method == 'POST') {
-        req.on('data', async function (data) {
-            queryData += data;
+    if (req.method === 'POST' && req.url === '/submit') {
+        let body = '';
+        req.on('data', async function (chunk) {
+            body += chunk;
 
             // run safety checks here
             // size check
-            if (queryData.length > 1e6) {
-                res.writeHead(413, "Request Too Large", { 'Content-Type': 'text/plain' }).end();
+            if (body.length > 1e6) {
+                res.writeHead(413, { 'Content-Type': 'text/plain' }).end("413 Request Too Large");
                 req.socket.destroy();
             }
             if (await getBlockedIps(req.socket.remoteAddress) === false) {
-                res.writeHead(403, "Forbidden", { 'Content-Type': 'text/plain' }).end();
+                res.writeHead(403, { 'Content-Type': 'text/plain' }).end("403 Forbidden");
                 req.socket.destroy();
             }
         });
 
-        request.on('end', function () {
-            req.post = querystring.parse(queryData);
-            console.log(req.post)
+        req.on('end', async function () {
+            // rarse form data
+            let formData = new URLSearchParams(body);
+            let hexEditId = genHexString(16)
+
+            let dropdown = formData.get('dropdown');
+            let pageCreation = formData.get('page');
+
+            let userAlias = formData.get('name');
+            let userIp = req.socket.remoteAddress
+
+            let content = formData.get('content');
+            let notes = formData.get('notes');
+
+
+            await webhook(userAlias, userIp, `./wikiPages/${dropdown}`, hexEditId, notes, content)
+
+            // Write the form data to a file or perform any other desired action
+            fs.writeFile(`${dropdown}.md`, content, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.statusCode = 500;
+                    res.end(`500 Error writing to file: ${err}\n\nPlease send a screenshot or copy the text`);
+                } else {
+                    res.statusCode = 200;
+                    res.end('200 Form data written successfully');
+                }
+            });
         });
 
-    } else 
-    if (req.method == 'GET') {
+    } else if (req.method === 'GET') {
         // parsing request
         var q = url.parse(req.url, true);
 
@@ -237,7 +281,7 @@ http.createServer(async function (req, res) {
                     contentType = 'application/javascript';
                 } else if (filename.endsWith('.json')) {
                     contentType = 'application/json';
-                }           
+                }
 
                 // otherwise, post to client
                 res.writeHead(200, "OK", { 'Content-Type': contentType });
@@ -247,6 +291,5 @@ http.createServer(async function (req, res) {
 
             }
         });
-    } else 
-    { response.writeHead(405, { 'Content-Type': 'text/plain' }).end(); };
+    } else { response.writeHead(405, { 'Content-Type': 'text/plain' }).end(); };
 }).listen(listenPort);
