@@ -25,14 +25,14 @@
 
     </head>
     <nav class="tab">
-        <img src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
+        <img id="hideGif" src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
         <div class="topnav">
             <a href="index.html">Home</a>
             <a class="active" href="wiki.html">Wiki</a>
             <a href="map.html">Map</a>
             <a href="about.html">About</a>
         </div>
-        <img class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:4%; max-height:4%;">
+        <img id="hideTheme" class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:4%; max-height:4%;">
     </nav>
     <body id="body">
         <div class="center">
@@ -48,7 +48,7 @@
                 <br>
 
                 <p class="coolp">
-                    <a href="#wiki-guide">Wiki Guide (Start Here!)</a> | <a href="wiki-edit.html">Wiki Editor (Need An Account!)</a>
+                    <a href="#wiki-guide">Wiki Guide (Start Here!)</a> | <a href="wiki-edit.html">Wiki Editor</a>
                 </p>
                 
                 <details>
@@ -108,6 +108,14 @@
         </script>
     </footer>
     <script>
+
+        let width = window.innerWidth;
+        console.log(width)
+        if (width <= 500){
+            document.getElementById("hideGif").style.display = 'none'
+            document.getElementById("hideTheme").style.display = 'none'
+        }
+
         function insertTag() {
 
         }
