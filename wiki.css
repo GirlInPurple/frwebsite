@@ -63,14 +63,6 @@ button:active {
     z-index: 1000;
 }
 
-article img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 75%;
-    box-shadow: inset #202020;
-}
-
 article {
     border: 1px solid #a8a8a8;
     border-radius: 5px;
@@ -80,6 +72,14 @@ article {
     /* Darker background for articles */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     /* Darker box shadow */
+}
+
+article img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    box-shadow: inset #202020;
 }
 
 article h2 {
@@ -102,13 +102,13 @@ article li {
     /* Slightly lighter text color */
 }
 
-article a {
+a {
     color: #189825;
     /* Light link color */
     text-decoration: none;
 }
 
-article a:hover {
+a:hover {
     text-decoration: underline;
 }
 

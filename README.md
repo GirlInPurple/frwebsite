@@ -10,14 +10,17 @@ Feel free to fork and add your own features, but there is no guarantee i will me
 
 ## written plans
 
+Anything pertaining to an account system has been postponed. Considering i was going to use Microsoft OAuth for it and this being a majority cracked server, i need another plan. Keeping the Alias-IP system until further notice.
+
 - [ ] Update README.md
   - [ ] Contributing Section
   - [ ] Wiki Section
   - [ ] Backend Explanation
-- [x] Cleaning up CSS
+- [ ] Cleaning up CSS
   - [x] Consistent Theme
   - [x] Mobile Support
   - [x] Fix the janky header
+  - [ ] Dark Mode
 - [ ] ~~Account~~ Alias System
   - [ ] ~~Username/Password system~~
   - [ ] Playerhead in the corner using the [Minotar API](https://minotar.net/avatar/notch/100)
@@ -26,7 +29,7 @@ Feel free to fork and add your own features, but there is no guarantee i will me
   - [x] Add it to `index.html`
   - [ ] Add monthly donation tracker
 - [ ] Wiki system
-  - [ ] Make the Wiki Editor
+  - [x] Make the Wiki Editor
   - [ ] Rewrite the Wiki's backend
   - [ ] ~~Intertwine it with the account system~~
 - [ ] Clean up the file system

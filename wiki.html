@@ -14,8 +14,10 @@
         <title>Wiki | Final Republic</title>
         <link id="themeStylesheet" rel="stylesheet" href="light.css">
         <script src="clientFunctions.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script> 
-        <!-- wiki library -->
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+        <!-- wiki libraries; Markdown converter -->
+
         <link id="themeStylesheet" rel="stylesheet" href="wiki.css">
         <link id="themeStylesheet" rel="stylesheet" href="./assets/authors.css">
         <!-- wiki overrides -->
@@ -36,50 +38,39 @@
     </nav>
     <body id="body">
         <div class="center">
+            <a id="showWhenArticle" href="wiki.html" style="display: none; ">< < < Return back to the Wiki</a>
             <div id="hideWhenArticle">
                 <h1><i><noscript>Your browser either does not support JavaScript or you have it turned off. This site wont work without it, please enable it!</noscript></i></h1>
 
                 <h1>The Final Republic Wiki</h1>
-                <h3 id="numberOfArticles"></h3>
-                <h3 id="numberOfSuccesses"></h3>
+                <h3 id="numberOfArticles">Number Of Articles : Loading...</h3>
+                <h3 id="numberOfSuccesses">Number Of Results for "" : Loading...</h3>
 
                 <input type="text" id="searchInput" placeholder="Search for articles and tags..." autofocus>
                 <button type="button" onclick="document.getElementById('searchInput').value = null; searchInput.dispatchEvent(new Event('input'));">Click to Clear</button>
                 <br>
 
                 <p class="coolp">
-                    <a href="#wiki-guide">Wiki Guide (Start Here!)</a> | <a href="wiki-edit.html">Wiki Editor</a>
+                    <a href="#wiki-guide">Wiki Guide (Start Here!)</a> | <a href="editor.html">Wiki Editor</a>
                 </p>
-                
-                <details>
-                    <summary>Topics</summary>
-                    <details>
-                        <summary>Basic</summary>
-                        <p>Some text</p>
-                        <!-- injects here -->
-                    </details>
-                    <details>
-                        <summary>Misc</summary>
-                        <p>Some text</p>
-                        <!-- injects here -->
-                    </details>
-                    <details>
-                        <summary>Years</summary>
-                        <p>Some text</p>
-                        <!-- injects here -->
-                    </details>
-                </details>
-                <details>
-                    <summary>Languages</summary>
+                <details id="tagsInject">
+                    <summary>Tags</summary>
+                    <p>Some basic filters for wiki pages.</p>
                     <!-- injects here -->
                 </details>
-                <details>
+                <details id="yearsInject">
+                    <summary>Years</summary>
+                    <p>The year the event, player, location, etc occured in.</p>
+                    <!-- injects here -->
+                </details>
+                <details id="authorsInject">
                     <summary>Authors</summary>
+                    <p>The author of the page. Added when someone contributes to a page.</p>
                     <!-- injects here -->
                 </details>
             </div>
             <div id="wikiContent" style="padding-top: 5%;">
-
+                <!-- injects here -->
             </div>
         </div>
         <div style="padding: 18em"></div>
@@ -93,31 +84,179 @@
             | <a href="contact.html">Contact, Legal, About</a>
             | <a onclick="document.getElementById('footer').style.display = 'none';">Click here to hide footer</a> |
         </p>
-        <script>
-            window.onload = async function(){
-                await getLatestCommit()
-            }
-            async function getLatestCommit() {
-                await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById("commitDate").innerHTML = data[0].commit.author.date;
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
-        </script>
     </footer>
     <script>
 
-        let width = window.innerWidth;
-        console.log(width)
-        if (width <= 500){
-            document.getElementById("hideGif").style.display = 'none'
-            document.getElementById("hideTheme").style.display = 'none'
+        document.getElementById('searchInput').addEventListener('input', async function(){
+                await wikiSearchAlgor()
+                refreshNumberText()
+        })
+
+        window.onload = async function(){
+            let width = window.innerWidth;
+            console.log(width)
+            if (width <= 500){
+                document.getElementById("hideGif").style.display = 'none'
+                document.getElementById("hideTheme").style.display = 'none'
+            }
+            await getLatestCommit()
+            await startWikiSys()
+        }
+
+        async function getLatestCommit() {
+            await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("commitDate").innerHTML = data[0].commit.author.date;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // original by ousmblueninja, rewrite by djzombiehunter
+        async function wikiSearchAlgor() {
+            // artificial loading time, also fixes a graphical issue with highlighting
+            let tempCooldown = Math.floor(Math.random()*500)
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(() => {
+
+                var searchQueries = document.getElementById('searchInput').value.toLowerCase().trim().split(' ');
+                var articles = document.querySelectorAll("article");
+
+                // repeat for how many articles there are
+                for (let i = 0; i < articles.length; i++) {
+                    // finds all elements you can search into
+                    var article = articles[i];
+                    var titleElement = article.querySelector("h2");
+                    var contentElements = article.querySelectorAll("p");
+                    var tags = Array.from(article.querySelectorAll(".tag")).map(tag => tag.textContent.toLowerCase());
+
+                    // change title of page to lowercase to help with search results
+                    var title = titleElement.textContent.toLowerCase();
+                    var content = article.textContent.toLowerCase();
+
+                    // check if all the search queries are present in either the title, content, or tags
+                    var allQueriesMatch = searchQueries.every(query => {
+                        var isTagSearch = query.startsWith("#");
+                        if (isTagSearch) {
+                            query = query.substring(1);
+                            return tags.includes(query);
+                        } else {
+                            return title.includes(query) || content.includes(query);
+                        }
+                    });
+
+                    // show or hide the article based on matches
+                    article.style.display = allQueriesMatch ? "block" : "none";
+
+                    // highlight the search queries in the title and content
+                    // this code is broken and makes <a> elements stop working due to how it handles classes
+                    // please change this.
+                    /*
+                    if (allQueriesMatch) {
+                        searchQueries.forEach(query => {
+                            var regex = new RegExp(query, 'gi');
+                            titleElement.innerHTML = titleElement.textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
+                            contentElements.forEach(contentElement => {
+                                contentElement.innerHTML = contentElement.textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
+                            });
+                        });
+                    }
+                    */
+                }
+                // finds all visible article elements
+                var visibleCount = 0;
+                for (let i = 0; i < articles.length; i++) {
+                    if (articles[i].offsetWidth > 0 && articles[i].offsetHeight > 0) {
+                        visibleCount++;
+                    }
+                }
+            }, tempCooldown ); // Delay in milliseconds
         }
 
         function insertTag() {
 
+        }
+
+        function refreshNumberText(){
+            // number of articles now updates automatically
+            document.getElementById("numberOfArticles").innerHTML = `Number Of Articles : ${document.querySelectorAll("article").length/2}`
+            // to fix a graphical bug on page load
+            document.getElementById("numberOfSuccesses").innerHTML = `Number Of Results for \"${document.getElementById('searchInput').value}\" : ${document.querySelectorAll("article").length/2}`
+        }
+
+        function toggleArticles(href) {
+            /*
+                this function is (almost) irreversible! 
+                you will need to back back to wiki.html when you are done! 
+                do not run this until is has to be!
+            */
+
+            // grab all the needed elements
+            let articles = document.getElementsByTagName('article')
+            let dashHide = document.getElementById('hideWhenArticle')
+            let dashShow = document.getElementById('showWhenArticle')
+            let safeArticle = document.getElementById(href.replace('#', ''))
+            
+            // hide EVERYTHING
+            dashHide.style.display = 'none'
+            for(let i = 0; i < articles.length; i++) {
+                articles[i].style.display = 'none';
+            }
+            console.log(href)
+            // show the needed article
+            safeArticle.style.display = 'block';
+            dashShow.style.display = 'block';
+        }
+
+        function linkHandling() {
+            // link validity on all links at once
+            let links = document.querySelectorAll('a[href^="#"]');
+            for(var i = 0; i < links.length; i++) {
+                let href = links[i].getAttribute('href')
+                if (href.includes("#")) { // line will throw an error when loading the footer's HREF value. please ignore.
+                    // get href of the link minus the #
+                    var articleId = links[i].getAttribute('href').substring(1);
+                    // check if the article exists
+                    var articleExists = document.getElementById(articleId) !== null;
+                    // update tooltip
+                    if (articleExists) {
+                        links[i].title = links[i].innerText + "\nClick to Visit Article";
+                    } else {
+                        links[i].title = links[i].innerText + "\nArticle Does Not Exist";
+                        links[i].style.color = "rgb(256, 64, 64)";
+                    }
+                }
+            }
+
+            // add a click listener to each link, VERY resource heavy but fuck it, it will work
+            for (var i = 0; i < links.length; i++) {
+                links[i].addEventListener('click', function(event) {
+                    // i honestly dont know what this does but the internet says to add it
+                    event.preventDefault(); 
+                    // hide all but the needed link
+                    toggleArticles(this.getAttribute('href'))
+                });
+            }
+        }
+        
+        function addInputBoxes(json, array, inject){
+            for (let searchIndex = 0; searchIndex < json[array].length; searchIndex++) {
+                // Checkbox
+                let eleBox = document.createElement("input");
+                eleBox.type = 'checkbox';
+                eleBox.id = json[array][searchIndex];
+                eleBox.name = json[array][searchIndex];
+                eleBox.value = json[array][searchIndex];
+                inject.appendChild(eleBox);
+                // Label
+                eleBox = document.createElement("label");
+                eleBox.for = json[array][searchIndex];
+                eleBox.innerHTML = json[array][searchIndex];
+                inject.appendChild(eleBox);
+                // Spacer
+                eleBox = document.createElement("br");
+                inject.appendChild(eleBox);
+            }
         }
 
         window.addEventListener('scroll', function() {
@@ -134,57 +273,50 @@
             }
         });
 
-        fetch('./wikiPages/wiki.json')
-            .then(response => response.text())
-            .then(data => {
-                oldData = JSON.parse(data)
-                let lang = "en-us"
+        async function startWikiSys(){
+            await fetch('./wikiPages/wiki.json')
+                .then(response => response.text())
+                .then(async(data) => {
+                    wikiJsonData = JSON.parse(data)
+                    
+                    // set up the filter search
+                    addInputBoxes(wikiJsonData, "tags", document.getElementById('tagsInject'))
+                    addInputBoxes(wikiJsonData, "years", document.getElementById('yearsInject'))
+                    addInputBoxes(wikiJsonData, "authors", document.getElementById('authorsInject'))
 
-                for (let index = 0; index < oldData.pages[lang].length; index++) {
-                    fetch(`./wikiPages/${lang}/${oldData.pages[lang][index]}`)
-                        .then(response => response.text())
-                        .then(data => {
+                    // make all the articles
+                    for (let articleIndex = 0; articleIndex < wikiJsonData.pages.length; articleIndex++) {
+                        await fetch(`./wikiPages/${wikiJsonData.pages[articleIndex]}.md`)
+                            .then(response => response.text())
+                            .then(data => {
 
-                            // checks if the article text contains the <meta> tag
-                            // only used in error messages or complex articles, of which can be excluded
-                            if (!data.includes("<meta")) {
-
-                                // loading article
+                                // making article
                                 let articleElement = document.getElementById('wikiContent')
-                                let ele = document.createElement("article");
-                                ele.innerHTML = data;
-                                ele.id = oldData.pages[lang][index].split(".")[0]; // a fine italian dish this is *chef's kiss*
-                                articleElement.appendChild(ele);
+                                let eleSplice = document.createElement("article");
+                                let eleFront = document.createElement("article");
 
-                                // link validity on the loaded wiki page
-                                var links = ele.querySelectorAll('a');
-                                for(var i = 0; i < links.length; i++) {
-                                    let href = links[i].getAttribute('href')
-                                    if (href.includes("#")) { // line will throw an error when loading the footer's HREF value. please ignore.
-                                        // get href of the link minus the #
-                                        var articleId = links[i].getAttribute('href').substring(1);
-                                        // check if the article exists
-                                        var articleExists = document.getElementById(articleId) !== null;
-                                        // update tooltip
-                                        if (articleExists) {
-                                            links[i].title = links[i].innerText + "\nClick to Visit Article";
-                                        } else {
-                                            links[i].title = links[i].innerText + "\nArticle Does Not Exist";
-                                            links[i].style.color = "rgb(256, 64, 64)";
-                                        }
-                                    }
-                                }
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                        });
-                };
-                
-                // number of articles now updates automatically
-                document.getElementById("numberOfArticles").innerHTML = "Number Of Articles : " + document.querySelectorAll("article").length;
-                // to fix a graphical bug on page load
-                document.getElementById("numberOfSuccesses").innerHTML = "Number Of Results for \"\" : " + document.querySelectorAll("article").length;
-            });
+                                let converter = new showdown.Converter()
+                                // loading splice article
+                                eleSplice.innerHTML = `${converter.makeHtml(data).substring(0,500)}... <a href="#${wikiJsonData.pages[articleIndex].split(".")[0]}">(click here to read more)<a>`
+                                eleSplice.id = `${wikiJsonData.pages[articleIndex].split(".")[0]}-splice`;
+                                eleSplice.style.fontSize = '10px'
+                                articleElement.appendChild(eleSplice);
+                                document.getElementById(`${wikiJsonData.pages[articleIndex].split(".")[0]}${wikiJsonData.pages[articleIndex].split(".")[0]}`.replace('-', '').replace('-', '')).style.fontSize = '30px';
+                                // loading fronting article
+                                eleFront.innerHTML = converter.makeHtml(data)
+                                eleFront.id = wikiJsonData.pages[articleIndex].split(".")[0];
+                                eleFront.style.display = 'none'
+                                articleElement.appendChild(eleFront);
+                            })
+                                
+                    };
+
+                    refreshNumberText()
+                    linkHandling()
+
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
     </script>
 </html>
