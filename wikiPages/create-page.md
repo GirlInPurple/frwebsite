@@ -9,7 +9,7 @@ _Clicking "Mount Cublak" on the [List Of Mountains](#list-of-mountains) pages le
 
 With connections to The Borderlands from the road to the south and Middle Spawn and Spawn City from the Jungle and Oak lines respectively, it could be considered one of the 3 suburbs of the main city; the other two being World Origin Road and The Borderlands. It contains a mountain with a glowing cube on top, a small plains village to the east, and a dual railway passing straight through the city; all with the theme of glowing purple crystals. FRTA Road 4 passes through the town, heading to Yuri's town.  
 
-As of Late July 2023, construction of Cublak is indefinitely paused.
+As of Late July 2023, construction of Cublak is indefinitely paused. TESTTESt
 
 ### Residents
 

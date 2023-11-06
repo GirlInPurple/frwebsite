@@ -10,6 +10,7 @@ const sanitizeHtml = require('sanitize-html');
 const FormData = require('form-data');
 const dotenv = require('dotenv');
 const axios = require('axios');
+const path = require('path');
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
@@ -132,6 +133,7 @@ async function webhook(alias, ip, page, editId, notes, fileContent) {
     let editUser = `Final Republic Wiki (${editId})`
     let editTitle = `Page: \`${page}\` | Id: ${editId}`
     let editNotes = `**Notes from the Editor:** \n${notes}`
+    console.log(editName + "\n" + editUser + "\n" + editTitle + "\n" + editNotes)
 
     const data = {
         username: editUser,
@@ -150,7 +152,7 @@ async function webhook(alias, ip, page, editId, notes, fileContent) {
         ]
     };
 
-    axios({
+    await axios({
         method: 'post',
         url: webhookURL, // replace with your webhook URL
         headers: {
@@ -168,27 +170,23 @@ async function webhook(alias, ip, page, editId, notes, fileContent) {
         return
     }
 
-    let filename = `${page}.md`;
-    let formData = new FormData();
-    formData.append("file", fs.createReadStream(filename), {
-        filename: filename,
-        contentType: 'text/html',
-    });
-
-    formData.append("username", editUser);
-
-    axios.post(webhookURL, formData, {
-        headers: formData.getHeaders()
+    let tempFilePath = `${__dirname}/temp/${editUser}.md`;
+    fs.writeFileSync(tempFilePath, fileContent);
+    
+    let form = new FormData();
+    form.append('username', editUser);
+    form.append('file', fs.createReadStream(tempFilePath), `${page}.md`);
+    
+    await axios.post(webhookURL, form, {
+        headers: form.getHeaders()
     }).then((response) => {
-        console.log(response);
+        console.log(`Response: ${response}`);
     }).catch((error) => {
-        console.error(error);
+        console.error(`Problem with request: ${error.message}`);
     });
 }
 
 async function updateWikiJson() {
-
-
 
     let jsonPath = `./wikiPages/wiki.json`
     fs.writeFile(jsonPath, data, function (err) {
@@ -217,7 +215,7 @@ http.createServer(async function (req, res) {
         });
 
         req.on('end', async function () {
-            // rarse form data
+            // parse form data
             let formData = new URLSearchParams(body);
             let hexEditId = genHexString(16)
 
@@ -230,11 +228,10 @@ http.createServer(async function (req, res) {
             let content = formData.get('content');
             let notes = formData.get('notes');
 
-
             await webhook(userAlias, userIp, `./wikiPages/${dropdown}`, hexEditId, notes, content)
 
             // Write the form data to a file or perform any other desired action
-            fs.writeFile(`${dropdown}.md`, content, (err) => {
+            fs.writeFile(`./wikiPages/${dropdown}.md`, content, (err) => {
                 if (err) {
                     console.error(err);
                     res.statusCode = 500;
