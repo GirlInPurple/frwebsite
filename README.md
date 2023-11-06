@@ -14,15 +14,17 @@ Feel free to fork and add your own features, but there is no guarantee i will me
   - [ ] Contributing Section
   - [ ] Wiki Section
   - [ ] Backend Explanation
-- [ ] Cleaning up CSS
+- [x] Cleaning up CSS
   - [x] Consistent Theme
-  - [ ] Mobile Support
+  - [x] Mobile Support
   - [x] Fix the janky header
 - [ ] ~~Account~~ Alias System
   - [ ] ~~Username/Password system~~
   - [ ] Playerhead in the corner using the [Minotar API](https://minotar.net/avatar/notch/100)
   - [ ] ~~New account page~~
 - [ ] Donation System
+  - [x] Add it to `index.html`
+  - [ ] Add monthly donation tracker
 - [ ] Wiki system
   - [ ] Make the Wiki Editor
   - [ ] Rewrite the Wiki's backend
