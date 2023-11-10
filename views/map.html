@@ -5,22 +5,23 @@
 
         <!-- discord embed integration -->
         <meta content="Final Republic" property="og:site_name">
-        <meta content="Error Page | Final Republic" property="og:title">
-        <meta content="An error page. Nothing interesting here." property="og:description">
+        <meta content="Map | Final Republic" property="og:title">
+        <meta content="Final Republic's World Map. Hosted using the Bluemap plugin." property="og:description">
         <meta content="https://cdn.discordapp.com/attachments/1061516148325220455/1074527045561884722/f7bd4c45-d74b-405c-b57c-852917af9cc7.png" property='og:image'>
         <meta name="theme-color" content="#bd97bd">
 
         <!-- make the website look good -->
-        <title>Error Page | Final Republic</title>
+        <title>Wiki | Final Republic</title>
         <link id="themeStylesheet" rel="stylesheet" href="light.css">
-        <script src="clientFunctions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script> <!-- wiki library -->
+        <link id="themeStylesheet" rel="stylesheet" href="wiki.css"> <!-- wiki overrides -->
 
         <!-- mobile support, keep this at the end of <head> so it can override the loaded stylesheet -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     </head>
     <nav class="tab">
-        <img src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
+        <img src="FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
         <div class="topnav">
             <a href="index.html">Home</a>
             <a href="wiki.html">Wiki</a>
@@ -31,9 +32,12 @@
     </nav>
     <body id="body">
         <div class="center">
-            <h1>404</h1>
-            <h3>File Not Found!?</h3>
-            <p>Click <a href="index.html">Here</a> to go back home.</p>
+            <p>If you see this for longer than a second, click <a href="" id="redirectText">here</a> to to to the map.</p>
+            <script>
+                const redirect = 'http://finalrepublic.spmc.co/bluemap.jsp'
+                document.getElementById('redirectText').href = redirect
+                window.location.replace(redirect);
+            </script>
         </div>
     </body>
     <footer id="footer">
@@ -45,9 +49,20 @@
             | <a onclick="document.getElementById('footer').style.display = 'none';">Click here to hide footer</a> |
         </p>
         <script>
-            window.onload = async function(){
-                await getLatestCommit()
+            // This function toggles between light and dark mode
+            function toggleTheme() {
+                let themeStylesheet = document.getElementById('themeStylesheet');
+                let darkMode = localStorage.getItem('darkMode') === 'true';
+                if (darkMode) {
+                    themeStylesheet.href = 'light.css';
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    themeStylesheet.href = 'dark.css';
+                    localStorage.setItem('darkMode', 'true');
+                }
             }
+        
+            // This function gets the latest commit
             async function getLatestCommit() {
                 await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
                     .then(response => response.json())
@@ -56,6 +71,20 @@
                     })
                     .catch(error => console.error('Error:', error));
             }
+        
+            // This code runs when the page loads
+            window.onload = async function() {
+                // Set the theme based on the value in localStorage
+                let darkMode = localStorage.getItem('darkMode') === 'true';
+                let themeStylesheet = document.getElementById('themeStylesheet');
+                themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
+        
+                // Get the latest commit
+                await getLatestCommit();
+            }
+        
+            // This code runs when the theme toggle element is clicked
+            document.querySelector('.themeToggle').addEventListener('click', toggleTheme);
         </script>
     </footer>
 </html>

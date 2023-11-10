@@ -32,8 +32,8 @@ Anything pertaining to an account system has been postponed. Considering i was g
   - [x] Make the Wiki Editor
   - [ ] Rewrite the Wiki's backend
   - [ ] ~~Intertwine it with the account system~~
-- [ ] Clean up the file system
-  - [ ] Have separate directories for images, styles, html, js, json, etc
+- [x] Clean up the file system
+  - [x] Have separate directories for images, styles, html, js, json, etc
 - [ ] Make it as small and clean as possible
   - [x] Have it be fast and small enough to run on 256mb of ram so it can run on even the cheapest of servers (currently using [FL0](https://www.fl0.com/))
   - [ ] Small file footprint for more Wiki pages

@@ -13,14 +13,13 @@
         <!-- make the website look good -->
         <title>Wiki Editor | Final Republic</title>
         <link id="themeStylesheet" rel="stylesheet" href="light.css">
-        <script src="clientFunctions.js"></script>
 
         <!-- mobile support, keep this at the end of <head> so it can override the loaded stylesheet -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     </head>
     <nav class="tab">
-        <img src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
+        <img src="FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
         <div class="topnav">
             <a href="index.html">Home</a>
             <a href="wiki.html">Wiki</a>
@@ -108,9 +107,20 @@
             | <a onclick="document.getElementById('footer').style.display = 'none';">Click here to hide footer</a> |
         </p>
         <script>
-            window.onload = async function(){
-                await getLatestCommit()
+            // This function toggles between light and dark mode
+            function toggleTheme() {
+                let themeStylesheet = document.getElementById('themeStylesheet');
+                let darkMode = localStorage.getItem('darkMode') === 'true';
+                if (darkMode) {
+                    themeStylesheet.href = 'light.css';
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    themeStylesheet.href = 'dark.css';
+                    localStorage.setItem('darkMode', 'true');
+                }
             }
+        
+            // This function gets the latest commit
             async function getLatestCommit() {
                 await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
                     .then(response => response.json())
@@ -119,6 +129,20 @@
                     })
                     .catch(error => console.error('Error:', error));
             }
+        
+            // This code runs when the page loads
+            window.onload = async function() {
+                // Set the theme based on the value in localStorage
+                let darkMode = localStorage.getItem('darkMode') === 'true';
+                let themeStylesheet = document.getElementById('themeStylesheet');
+                themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
+        
+                // Get the latest commit
+                await getLatestCommit();
+            }
+        
+            // This code runs when the theme toggle element is clicked
+            document.querySelector('.themeToggle').addEventListener('click', toggleTheme);
         </script>
     </footer>
     <script>

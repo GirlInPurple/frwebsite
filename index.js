@@ -18,7 +18,7 @@ dotenv.config(); const listenPort = process.env.PORT ?? 8080;
 
 // create the server
 http.createServer(async function (req, res) {
-    if (req.method === 'POST' && req.url === '/submit') {
+    if (req.method === 'POST' && req.url === '/submit.html') {
 
         let body = '';
         req.on('data', async function (chunk) {
@@ -57,7 +57,11 @@ http.createServer(async function (req, res) {
                 `Update ${dropdown}.md; Notes from Editor; ${notes}`
             );
 
-            res.writeHead(202, { 'Content-Type': 'text/plain' }).end("Request Accepted");
+            res.writeHead(202, { 'Content-Type': 'text/html' })
+            fs.readFile('./submit.html', function (err, data) {
+                res.write(data)
+                res.end();
+            });
         });
 
         req.on('error', function (err) {
@@ -69,46 +73,73 @@ http.createServer(async function (req, res) {
         // parsing request
         var q = url.parse(req.url, true);
 
-        // posting html files
-        var filename = "." + q.pathname;
+        /*
+            grabbing files
+            i tried to make this more compact and easier to read, but everything i did to it made it immediately break
+            just add another extension to it and dont touch it again unless you want to spend an hour on 50 lines of code
+        */
+        let contentType, filename, statusCode
+        if (q.pathname.endsWith('.html')) {
+            contentType = 'text/html';
+            filename = `./views/${q.pathname}`;
+            statusCode = 200
+
+        } else if (q.pathname.endsWith('.css')) {
+            contentType = 'text/css';
+            filename = `./assets/css/${q.pathname}`;
+            statusCode = 200
+
+        } else if (q.pathname.endsWith('.js')) {
+            contentType = 'application/javascript';
+            filename = `.${q.pathname}`;
+            statusCode = 200
+
+        } else if (q.pathname.endsWith('.json')) {
+            contentType = 'application/json';
+            filename = `./${q.pathname}`;
+            statusCode = 200
+
+        } else if (q.pathname.endsWith('.png')) {
+            contentType = 'image/png';
+            filename = `./assets/img_vid/${q.pathname}`;
+            statusCode = 200
+
+        } else if (q.pathname.endsWith('.gif')) {
+            contentType = 'image/gif';
+            filename = `./assets/img_vid/${q.pathname}`;
+            statusCode = 200
+
+        } else if (q.pathname == '/') { // no page specified, go to home page
+            contentType = 'text/html';
+            filename = './views/index.html'
+            statusCode = 300
+
+        } else { // if an error occurs
+            if (q.pathname.endsWith('.html')) {
+                contentType = 'text/html';
+                filename = './views/error.html'
+                statusCode = 404
+    
+            } else {
+                contentType = 'text/plain';
+                filename = './assets/misc/error.txt'
+                statusCode = 404
+            }
+
+        }
+        console.log(filename, q.pathname)
+
+        // posting files
         fs.readFile(filename, async function (err, data) {
-
-            // error handling
-            // sends you to index.html if its an empty link
-            if (filename == "./" || filename == "/" || filename == "") {
-                res.writeHead(200, "OK", { 'Content-Type': 'text/html' });
-                fs.readFile('./index.html', function (err, data) {
-                    res.write(data)
-                    res.end();
-                });
-            }
-            if (err) {
-                // sends you to error.html if it cant find the file you're looking for
-                res.writeHead(404, "File Not Found", { 'Content-Type': 'text/html' });
-                fs.readFile('./error.html', function (err, data) {
-                    res.write(data)
-                    res.end();
-                });
-            }
-
             try {
-                // send files
-                var contentType = 'text/html';
-                if (filename.endsWith('.css')) {
-                    contentType = 'text/css';
-                } else if (filename.endsWith('.js')) {
-                    contentType = 'application/javascript';
-                } else if (filename.endsWith('.json')) {
-                    contentType = 'application/json';
-                }
-
-                // otherwise, post to client
-                res.writeHead(200, "OK", { 'Content-Type': contentType });
+                // post to client
+                res.writeHead(statusCode, { 'Content-Type': contentType });
                 res.write(data);
                 res.end();
-            } catch {
-                console.log(`could not find ${filename}, skipping`)
+            } catch (err) {
+                console.log(`could not find ${filename} because ${err}, skipping`)
+                res.writeHead(404, { 'Content-Type': 'text/plain' }).end();
             }
         });
-    } else { response.writeHead(405, { 'Content-Type': 'text/plain' }).end(); };
+    } else { res.writeHead(405, { 'Content-Type': 'text/plain' }).end('405 Method Not Allowed'); };
 }).listen(listenPort);

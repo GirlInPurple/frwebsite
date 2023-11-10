@@ -13,13 +13,12 @@
         <!-- make the website look good -->
         <title>Wiki | Final Republic</title>
         <link id="themeStylesheet" rel="stylesheet" href="light.css">
-        <script src="clientFunctions.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
         <!-- wiki libraries; Markdown converter -->
 
         <link id="themeStylesheet" rel="stylesheet" href="wiki.css">
-        <link id="themeStylesheet" rel="stylesheet" href="./assets/authors.css">
+        <link id="themeStylesheet" rel="stylesheet" href="authors.css">
         <!-- wiki overrides -->
 
         <!-- mobile support, keep this at the end of <head> so it can override the loaded stylesheet -->
@@ -27,14 +26,14 @@
 
     </head>
     <nav class="tab">
-        <img id="hideGif" src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
+        <img id="hideGif" src="FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
         <div class="topnav">
             <a href="index.html">Home</a>
             <a class="active" href="wiki.html">Wiki</a>
             <a href="map.html">Map</a>
             <a href="about.html">About</a>
         </div>
-        <img id="hideTheme" class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:4%; max-height:4%;">
+        <img id="hideTheme" class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="padding-right: 10px;">
     </nav>
     <body id="body">
         <div class="center">
@@ -110,6 +109,11 @@
         });
 
         window.onload = async function(){
+            // Set the theme based on the value in localStorage
+            let darkMode = localStorage.getItem('darkMode') === 'true';
+            let themeStylesheet = document.getElementById('themeStylesheet');
+            themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
+
             let width = window.innerWidth;
             console.log(width)
             if (width <= 500){
@@ -118,6 +122,19 @@
             }
             await getLatestCommit()
             await startWikiSys()
+        }
+
+        // This function toggles between light and dark mode
+        function toggleTheme() {
+            let themeStylesheet = document.getElementById('themeStylesheet');
+            let darkMode = localStorage.getItem('darkMode') === 'true';
+            if (darkMode) {
+                themeStylesheet.href = 'light.css';
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                themeStylesheet.href = 'dark.css';
+                localStorage.setItem('darkMode', 'true');
+            }
         }
 
         async function getLatestCommit() {

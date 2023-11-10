@@ -13,18 +13,17 @@
         <!-- make the website look good -->
         <title>Home | Final Republic</title>
         <link id="themeStylesheet" rel="stylesheet" href="light.css">
-        <script src="clientFunctions.js"></script>
 
         <!-- mobile support, keep this at the end of <head> so it can override the loaded stylesheet -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     </head>
-    <body id="body" style="background-image: url(./assets/background.png); position: absolute; top: -20%; width: 100%; background-repeat: no-repeat; background-attachment: fixed;">
+    <body id="body" style="background-image: url(/background.png); position: absolute; top: -20%; width: 100%; background-repeat: no-repeat; background-attachment: fixed;">
         <div style="padding: 7%;"><!-- breaks site if removed!!! --></div>
         <div class="center" style="height: 900px;">
             <nav class="tab" style="background-image: none;">
-                <img src="assets/FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:8%;">
-                <div class="topnav" style="background: #d5d5d5;">
+                <img src="FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:8%;">
+                <div class="topnav" style="background: #555;">
                     <a class="active" href="index.html">Home</a>
                     <a href="wiki.html">Wiki</a>
                     <a href="map.html">Map</a>
@@ -33,7 +32,7 @@
                 <img class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:8%; max-height: 8%;">
                 <b><p id="splashText" onload="changeSplashText()" onclick="changeSplashText()" class="splashText"></p></b>
             </nav>
-            <div id="sidebarDiv" style="float: left; width: 25%; background-color: #d5d5d5; overflow: visible;border-right: 2px solid #707070; border-bottom: 2px solid #707070; border-radius: 0px 0px 25px;">
+            <div id="sidebarDiv" class="sidebarParent">
                 <a onclick="document.getElementById('sidebarDiv').style.display = 'none'; document.getElementById('contentDiv').style.width = '100%';" class="smalltext">click to hide sidebar</a>
                 <div class="sidebar" style="display: block;">
                     <h2>Donations needed to keep running:</h2>
@@ -72,7 +71,7 @@
                     </p>
                 </div>
             </div>
-            <div id="contentDiv" style="float: right; width: 72%; background-color: #d5d5d5; overflow: visible;">
+            <div id="contentDiv" class="contentParent">
                 <h1 style="padding: none;">The Final Republic Website</h1>
                 <p>
                     Welcome to the offical Final Republic Website.<br>
@@ -103,6 +102,10 @@
     </body>
     <script>
         window.addEventListener('load', async function(){
+
+            let darkMode = localStorage.getItem('darkMode') === 'true';
+            let themeStylesheet = document.getElementById('themeStylesheet');
+            themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
             
             let width = window.innerWidth;
             console.log(width)
@@ -133,6 +136,20 @@
             splashText.innerHTML = splashValues[splashNumber]
             splashText.style.fontSize = `${splashSizes[splashNumber]}px`;
         }
+
+        document.querySelector('.themeToggle').addEventListener('click', toggleTheme);
+        function toggleTheme() {
+            let themeStylesheet = document.getElementById('themeStylesheet');
+            let darkMode = localStorage.getItem('darkMode') === 'true';
+            if (darkMode) {
+                themeStylesheet.href = 'light.css';
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                themeStylesheet.href = 'dark.css';
+                localStorage.setItem('darkMode', 'true');
+            }
+        }
+
         async function getLatestCommit() {
             await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
                 .then(response => response.json())

@@ -2,8 +2,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #e0e0e0;
-    color: #1f1f1f;
+    background-color: #1f1f1f;
+    color: #e0e0e0;
     overflow: scroll;
     overflow-x: hidden;
 }
@@ -12,9 +12,9 @@ nav.tab {
     display: flex;
     position: relative;
     justify-content: center;
-    background-color: #d5d5d5;
+    background-color: #555;
     padding: 10px;
-    background-image: url('./assets/background.png');
+    background-image: url('/background.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -28,7 +28,7 @@ nav.tab {
     padding: 10px;
 
     --nav-left: #bd97bd;
-    --nav-right: #d5d5d5;
+    --nav-right: #555;
     background: -webkit-linear-gradient(left, var(--nav-left), var(--nav-right));
     background: -moz-linear-gradient(left, var(--nav-left), var(--nav-right));
     background: -ms-linear-gradient(left, var(--nav-left), var(--nav-right));
@@ -39,8 +39,8 @@ nav.tab {
 /* Style the links inside the navigation bar */
 .topnav a {
     float: left;
-    color: #2b2b2b;
-    background-color: #b7b7b7;
+    color: #d5d5d5;
+    background-color: #555;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -49,21 +49,20 @@ nav.tab {
 
 /* Change the color of links on hover */
 .topnav a:hover {
-    background-color: #ddd;
+    background-color: #727272;
     color: black;
 }
 
 /* Add a color to the active/current link */
 .topnav a.active {
-    background-color: #04AA6D;
+    background-color: #bd97bd;
     color: white;
 }
 
 img.themeToggle {
-    max-width: 4%;
-    max-height: 4%;
-    background-color: #d5d5d5;
-    padding-right: 10px;
+    max-width:4%; 
+    max-height:4%; 
+    background-color: #555;
 }
 
 @keyframes splashAnimation {
@@ -90,7 +89,7 @@ div.center {
     margin: 50px auto;
     padding: 20px;
     position: relative;
-    background-color: #d5d5d5;
+    background-color: #555;
     /* Darker background for the center div */
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
     /* Darker box shadow */
@@ -110,8 +109,25 @@ div.sidebar {
     border-radius: 0px 0px 25px;
 }
 
+div.sidebarParent {
+    float: left;
+    width: 25%; 
+    background-color: #555; 
+    overflow: visible;
+    border-right: 2px solid #707070; 
+    border-bottom: 2px solid #707070; 
+    border-radius: 0px 0px 25px;
+}
+
+div.contentParent {
+    float: right; 
+    width: 72%; 
+    background-color: #555; 
+    overflow: visible;
+}
+
 h1 {
-    color: #282828;
+    color: #d5d5d5;
     /* Light text color */
 }
 
@@ -124,7 +140,7 @@ footer {
     bottom: 0;
     width: 100%;
     justify-content: space-between;
-    background-color: #d5d5d5;
+    background-color: #555;
     color: #000000;
     padding: 5px;
     font-size: 10px;
