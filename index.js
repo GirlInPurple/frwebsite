@@ -6,198 +6,20 @@ Most of this code isnt mine anyway, thanks stackoverflow
 
 */
 
-const sanitizeHtml = require('sanitize-html');
-const FormData = require('form-data');
+const { commitFileToRepo, wikiChannelWebhook } = require('./apis')
+const { getBlockedIps, genHexString } = require('./misc')
 const dotenv = require('dotenv');
-const axios = require('axios');
-const path = require('path');
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
-const os = require('os');
 
 // fl0 injects port into the docker container; uses that port unless it cant be found
-dotenv.config();
-const listenPort = process.env.PORT ?? 8080;
-const webhookURL = process.env.WEBHOOK
-
-function hexToDecimal(hex) {
-    return parseInt(hex.replace("#", ""), 16)
-}
-
-function genHexString(len) {
-    const hex = '0123456789ABCDEF';
-    let output = '';
-    for (let i = 0; i < len; ++i) {
-        output += hex.charAt(Math.floor(Math.random() * hex.length));
-    }
-    return output;
-}
-
-async function getBlockedIps(ip) {
-    try {
-        let response
-        let data
-
-        // try VPN ip list
-        response = await fetch('https://raw.githubusercontent.com/X4BNet/lists_vpn/main/output/vpn/ipv4.txt');
-        data = await response.text();
-        data = data.split('\n');
-        for (let i = 0; i < data.length; i++) {
-            data[i] = data[i].split("/")[0];
-        }
-        if (ip in data) {
-            return false // false means unsafe
-        }
-
-        // try get-ip-intel
-        response = await fetch(`https://www.getipintel.net/check.php?ip=${ip}&flags=m`); // https://www.getipintel.net/ open an issue to change the flags
-        data = await response.text();
-        if (data === '1') {
-            return false // false means unsafe
-        }
-
-        // if it passes both checks;
-        return true // true means safe
-
-    } catch (error) {
-        console.error(`An error has occured ; ${error} ; this user has been excused from the ip blocker`);
-        return true // you could cause an error to occur and get around the block, but its so unlikely that ill leave it alone
-    }
-}
-
-async function readSanitizeWrite(file, newValue) {
-
-    // stage 1: read the file
-    file = file + '.html'
-    let filePath = path.join(__dirname, file);
-    let sanitized = ""
-
-    console.log('reading file');
-    fs.readFile(filePath, 'utf-8', function (err, data) {
-        if (err) throw err;
-        console.log('old file contents:', data);
-
-        // stage 2: make a backup with info of the editor contained
-        let now = new Date();
-        let year = now.getFullYear();
-        let month = ("0" + (now.getMonth() + 1)).slice(-2);
-        let day = ("0" + now.getDate()).slice(-2);
-        let hour = ("0" + now.getHours()).slice(-2);
-        let minute = ("0" + now.getMinutes()).slice(-2);
-        let second = ("0" + now.getSeconds()).slice(-2);
-        let copyPath = `${__dirname}\\backups\\${year}-${month}-${day}-${hour}-${minute}-${second}-${file}`
-
-        fs.copyFile(filePath, copyPath, (err) => {
-            if (err) throw err;
-            console.log(`${filePath} was copied to ${copyPath}`);
-        });
-
-        // stage 3: sanitize the file and write it
-
-        if (newValue) {
-            // "sanitize" the file
-            sanitized = sanitizeHtml(newValue, {
-                allowedTags: [
-                    'a', 'span',
-                    'img', 'button',
-                    'h1', 'h2', 'h3', 'p',
-                    'ul', 'li',
-                    'i', 'b', 'br'
-                ],
-                allowedAttributes: {
-                    'a': [],
-                    'img': [],
-                    'button': []
-                }
-            });
-        }
-
-        // stage 4: write the new file content and check it
-
-        fs.writeFile(filePath, sanitized, 'utf-8', function (err) {
-            if (err) throw err;
-            console.log('file written');
-
-            fs.readFile(filePath, 'utf-8', function (err, newData) {
-                if (err) throw err;
-                console.log('new file contents:', newData);
-            });
-        });
-    });
-}
-
-async function webhook(alias, ip, page, editId, notes, fileContent) {
-
-    let editName = `IP: ${ip} | Alias: ${alias}`
-    let editUser = `Final Republic Wiki (${editId})`
-    let editTitle = `Page: \`${page}\` | Id: ${editId}`
-    let editNotes = `**Notes from the Editor:** \n${notes}`
-    console.log(editName + "\n" + editUser + "\n" + editTitle + "\n" + editNotes)
-
-    const data = {
-        username: editUser,
-        embeds: [
-            {
-                author: {
-                    name: editName
-                },
-                title: editTitle,
-                description: editNotes,
-                color: hexToDecimal("#88ff00"),
-                "thumbnail": {
-                    "url": `https://minotar.net/avatar/${alias}/100`
-                }
-            }
-        ]
-    };
-
-    await axios({
-        method: 'post',
-        url: webhookURL, // replace with your webhook URL
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        data: data
-    }).then((response) => {
-        console.log(`Response: ${response}`);
-    }).catch((error) => {
-        console.error(`Problem with request: ${error.message}`);
-    });
-
-    // send html file
-    if (fileContent == "") {
-        return
-    }
-
-    let tempFilePath = `${__dirname}/temp/${editUser}.md`;
-    fs.writeFileSync(tempFilePath, fileContent);
-    
-    let form = new FormData();
-    form.append('username', editUser);
-    form.append('file', fs.createReadStream(tempFilePath), `${page}.md`);
-    
-    await axios.post(webhookURL, form, {
-        headers: form.getHeaders()
-    }).then((response) => {
-        console.log(`Response: ${response}`);
-    }).catch((error) => {
-        console.error(`Problem with request: ${error.message}`);
-    });
-}
-
-async function updateWikiJson() {
-
-    let jsonPath = `./wikiPages/wiki.json`
-    fs.writeFile(jsonPath, data, function (err) {
-        console.error(`Error on updateWikiJson() ; ${err} ; aborting`)
-    });
-}
+dotenv.config(); const listenPort = process.env.PORT ?? 8080;
 
 // create the server
 http.createServer(async function (req, res) {
-
     if (req.method === 'POST' && req.url === '/submit') {
+
         let body = '';
         req.on('data', async function (chunk) {
             body += chunk;
@@ -228,19 +50,19 @@ http.createServer(async function (req, res) {
             let content = formData.get('content');
             let notes = formData.get('notes');
 
-            await webhook(userAlias, userIp, `./wikiPages/${dropdown}`, hexEditId, notes, content)
+            await wikiChannelWebhook(userAlias, userIp, `${dropdown}`, hexEditId, notes, content)
+            await commitFileToRepo('GirlInPurple', 'frwebsite', 'wiki', 
+                `${dropdown}.md`, 
+                `${content}`, // sanitized = sanitize(fileContent, {allowedTags: ['br', 'div']})
+                `Update ${dropdown}.md; Notes from Editor; ${notes}`
+            );
 
-            // Write the form data to a file or perform any other desired action
-            fs.writeFile(`./wikiPages/${dropdown}.md`, content, (err) => {
-                if (err) {
-                    console.error(err);
-                    res.statusCode = 500;
-                    res.end(`500 Error writing to file: ${err}\n\nPlease send a screenshot or copy the text`);
-                } else {
-                    res.statusCode = 200;
-                    res.end('200 Form data written successfully');
-                }
-            });
+            res.writeHead(202, { 'Content-Type': 'text/plain' }).end("Request Accepted");
+        });
+
+        req.on('error', function (err) {
+            console.error(err);
+            res.writeHead(500, { 'Content-Type': 'text/plain' }).end("Internal Server Error");
         });
 
     } else if (req.method === 'GET') {
@@ -269,8 +91,8 @@ http.createServer(async function (req, res) {
                 });
             }
 
-            // send files if no errors
             try {
+                // send files
                 var contentType = 'text/html';
                 if (filename.endsWith('.css')) {
                     contentType = 'text/css';
@@ -285,7 +107,7 @@ http.createServer(async function (req, res) {
                 res.write(data);
                 res.end();
             } catch {
-
+                console.log(`could not find ${filename}, skipping`)
             }
         });
     } else { response.writeHead(405, { 'Content-Type': 'text/plain' }).end(); };
