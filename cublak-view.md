@@ -1,7 +1,7 @@
 # [Cublak View](#cublak-view)
 ___Tags:<span class="tag tag-green">Location</span><span class="tag tag-pink">2023</span><span class="tag tag-blue">English</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
-_This page has been translated into the following: [Fran�ais](#cublak-view-FR), [&#2361;&#2367;&#2306;&#2342;&#2368;](#cublak-view-ID)_
+_This page has been translated into the following: [Français](#cublak-view-FR), [&#2361;&#2367;&#2306;&#2342;&#2368;](#cublak-view-ID)_
 
 _Clicking "Mount Cublak" on the [List Of Mountains](#list-of-mountains) pages leads you here. There is no designated page for Mount Cublak._
 
