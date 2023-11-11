@@ -138,7 +138,13 @@ http.createServer(async function (req, res) {
                 res.end();
             } catch (err) {
                 console.log(`could not find ${filename} because ${err}, skipping`)
-                res.writeHead(404, { 'Content-Type': 'text/plain' }).end();
+                if (q.pathname.endsWith('.html')) {
+                    fs.readFile('./views/error.html', async function (err, data) {
+                        res.writeHead(404, { 'Content-Type': 'text/html' }).end(data)
+                    });
+                } else {
+                    res.writeHead(404, { 'Content-Type': 'text/plain' }).end();
+                }
             }
         });
     } else { res.writeHead(405, { 'Content-Type': 'text/plain' }).end('405 Method Not Allowed'); };

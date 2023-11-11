@@ -5,13 +5,13 @@
 
         <!-- discord embed integration -->
         <meta content="Final Republic" property="og:site_name">
-        <meta content="Wiki | Final Republic" property="og:title">
-        <meta content="The wiki pages for FinalRepublic, from everything between a cult about chickens to multiple a full scale wars." property="og:description">
+        <meta content="Forums | Final Republic" property="og:title">
+        <meta content="A miror of the #server-forum channel on the Discord server." property="og:description">
         <meta content="https://cdn.discordapp.com/attachments/1061516148325220455/1074527045561884722/f7bd4c45-d74b-405c-b57c-852917af9cc7.png" property='og:image'>
         <meta name="theme-color" content="#bd97bd">
 
         <!-- make the website look good -->
-        <title>Wiki | Final Republic</title>
+        <title>Forums | Final Republic</title>
         <link id="themeStylesheet" rel="stylesheet" href="light.css">
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
@@ -29,7 +29,8 @@
         <img id="hideGif" src="FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
         <div class="topnav">
             <a href="index.html">Home</a>
-            <a class="active" href="wiki.html">Wiki</a>
+            <a href="wiki.html">Wiki</a>
+            <a class="active" href="forum.html">Forums</a>
             <a href="map.html">Map</a>
             <a href="about.html">About</a>
         </div>
@@ -109,6 +110,7 @@
         });
 
         window.onload = async function(){
+
             // Set the theme based on the value in localStorage
             let darkMode = localStorage.getItem('darkMode') === 'true';
             let themeStylesheet = document.getElementById('themeStylesheet');
