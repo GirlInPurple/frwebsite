@@ -13,6 +13,7 @@
         <!-- make the website look good -->
         <title>Wiki | Final Republic</title>
         <link id="themeStylesheet" rel="stylesheet" href="light.css">
+        <link rel="icon" href="FinalRepublic_GIF_logo.gif"> <!-- https://en.wikipedia.org/wiki/Favicon#Image_file_format_support -->
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
         <!-- wiki libraries; Markdown converter -->
@@ -330,6 +331,9 @@
 
                     // make all the articles
                     for (let articleIndex = 0; articleIndex < wikiJsonData.length; articleIndex++) {
+                        if (wikiJsonData[articleIndex].endsWith('.json')){
+                            return
+                        }
                         await fetch(`https://raw.githubusercontent.com/GirlInPurple/frwebsite/wiki/${wikiJsonData[articleIndex]}`)
                             .then(response => response.text())
                             .then(data => {

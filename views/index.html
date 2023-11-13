@@ -13,6 +13,7 @@
         <!-- make the website look good -->
         <title>Home | Final Republic</title>
         <link id="themeStylesheet" rel="stylesheet" href="light.css">
+        <link rel="icon" href="FinalRepublic_GIF_logo.gif"> <!-- https://en.wikipedia.org/wiki/Favicon#Image_file_format_support -->
 
         <!-- mobile support, keep this at the end of <head> so it can override the loaded stylesheet -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +24,7 @@
         <div class="center" style="height: 900px;">
             <nav class="tab" style="background-image: none;">
                 <img src="FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:8%;">
-                <div class="topnav" style="background: #555;">
+                <div class="topnav">
                     <a class="active" href="index.html">Home</a>
                     <a href="wiki.html">Wiki</a>
                     <a href="map.html">Map</a>
@@ -35,8 +36,8 @@
             <div id="sidebarDiv" class="sidebarParent">
                 <a onclick="document.getElementById('sidebarDiv').style.display = 'none'; document.getElementById('contentDiv').style.width = '100%';" class="smalltext">click to hide sidebar</a>
                 <div class="sidebar" style="display: block;">
-                    <h2>Donations needed to keep running:</h2>
-                    <p>NaN out of $NaNusd</p>
+                    <h2>Donations in the past month</h2>
+                    <a id="donoBoard" href="https://docs.google.com/spreadsheets/d/1yvvGv7Y1pX4qfU_hUKwUmh1UrXI_5aWR4C2-NIGVi6Y/edit?usp=sharing" title="">$NaNusd</a>
                     <p class="smalltext">
                         Resets at the beginning of the month when services are paid.
                         You will not get any perks or ranks on the server.
@@ -101,8 +102,8 @@
         </div>
     </body>
     <script>
-        window.addEventListener('load', async function(){
-
+        window.onload = async function(){
+            // Set the theme based on the value in localStorage
             let darkMode = localStorage.getItem('darkMode') === 'true';
             let themeStylesheet = document.getElementById('themeStylesheet');
             themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
@@ -116,7 +117,9 @@
 
             changeSplashText();
             await getLatestCommit()
-        });
+            await updateDonoAmount()
+        };
+
         function changeSplashText() {
             const splashValues = [
                 "Quite the rarity 'init?",
@@ -137,7 +140,7 @@
             splashText.style.fontSize = `${splashSizes[splashNumber]}px`;
         }
 
-        document.querySelector('.themeToggle').addEventListener('click', toggleTheme);
+        // This function toggles between light and dark mode
         function toggleTheme() {
             let themeStylesheet = document.getElementById('themeStylesheet');
             let darkMode = localStorage.getItem('darkMode') === 'true';
@@ -157,6 +160,22 @@
                     document.getElementById("commitDate").innerHTML = data[0].commit.author.date;
                 })
                 .catch(error => console.error('Error:', error));
+        }
+
+        async function updateDonoAmount() {
+            await fetch(`https://raw.githubusercontent.com/GirlInPurple/frwebsite/wiki/backend.json`)
+                .then(resp => resp.json())
+                .then(async(backend) => {
+                    await fetch(`https://api.frankfurter.app/latest?amount=${backend.donations}&from=USD&to=EUR,INR,CNY`)
+                        .then(resp => resp.json())
+                        .then((conversionData) => {
+                            console.log(conversionData)
+                            let donoBoard = document.getElementById('donoBoard');
+                            donoBoard.innerText = `$${backend.donations}USD`
+                            donoBoard.title = `
+                            Click here to view our financials.\nAs of ${conversionData.date}, $${backend.donations}USD is equal to;\n€${conversionData.rates.EUR}EUR,\n₹${conversionData.rates.INR}INR,\n¥${conversionData.rates.CNY}CNY`
+                        });
+                });
         }
     </script>
 </html>

@@ -17,27 +17,27 @@ To get started, run `npm install && npx tsc -w -p .`, wait for all the packages 
 Anything pertaining to an account system has been postponed. Considering i was going to use Microsoft OAuth for it and this being a majority cracked server, i need another plan. Keeping the Alias-IP system until further notice.
 
 - [ ] Update README.md
-  - [ ] Contributing Section
+  - [x] Contributing Section
   - [ ] Wiki Section
   - [ ] Backend Explanation
-- [ ] Cleaning up CSS
+- [x] Cleaning up CSS
   - [x] Consistent Theme
   - [x] Mobile Support
   - [x] Fix the janky header
-  - [ ] Dark Mode
+  - [x] Dark Mode
 - [ ] ~~Account~~ Alias System
   - [ ] ~~Username/Password system~~
   - [ ] Playerhead in the corner using the [Minotar API](https://minotar.net/avatar/notch/100)
   - [ ] ~~New account page~~
-- [ ] Donation System
+- [x] Donation System
   - [x] Add it to `index.html`
-  - [ ] Add monthly donation tracker
-- [ ] Wiki system
+  - [ ] ~~Add monthly donation tracker~~
+- [x] Wiki system
   - [x] Make the Wiki Editor
-  - [ ] Rewrite the Wiki's backend
+  - [x] Rewrite the Wiki's backend
   - [ ] ~~Intertwine it with the account system~~
 - [x] Clean up the file system
   - [x] Have separate directories for images, styles, html, js, json, etc
-- [ ] Make it as small and clean as possible
+- [x] Make it as small and clean as possible
   - [x] Have it be fast and small enough to run on 256mb of ram so it can run on even the cheapest of servers (currently using [FL0](https://www.fl0.com/))
-  - [ ] Small file footprint for more Wiki pages
+  - [x] Small file footprint for more Wiki pages (currently takes up 142 MB)
