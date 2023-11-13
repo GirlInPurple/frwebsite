@@ -3,10 +3,7 @@
     "version": "0.0.1",
     "license": "GPLv3",
     "scripts": {
-        "start": "npm install --save-dev run-script-os && run-script-os",
-        "start:win32": "npm install && npx tsc -w -p .",
-        "start:default": "npm install && npx tsc -w -p .",
-        "run":"npm run index.js"
+        "run":"npm install && npm run index.js"
     },
     "main": "index.js",
     "devDependencies": {
