@@ -1,13 +1,24 @@
 {
     "name": "frwebsite",
     "version": "0.0.1",
+    "license": "GPLv3",
+    "scripts": {
+        "start": "npm install --save-dev run-script-os && run-script-os",
+        "start:win32": "npm install && npx tsc -w -p .",
+        "start:default": "npm install && npx tsc -w -p .",
+        "run":"npm run index.js"
+    },
+    "main": "index.js",
+    "devDependencies": {
+        "@types/node": "^20.9.0",
+        "run-script-os": "^1.1.6",
+        "typescript": "^5.2.2"
+    },
     "dependencies": {
         "axios": "^1.6.0",
         "dotenv": "16.3.1",
         "form-data": "^4.0.0",
         "node-fetch": "^3.3.2",
         "sanitize": "^2.1.2"
-    },
-    "scripts": {},
-    "main": "index.js"
+    }
 }
