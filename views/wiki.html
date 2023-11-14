@@ -26,17 +26,38 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     </head>
-    <nav class="tab">
-        <img id="hideGif" src="FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
-        <div class="topnav">
-            <a href="index.html">Home</a>
-            <a class="active" href="wiki.html">Wiki</a>
-            <a href="map.html">Map</a>
-            <a href="about.html">About</a>
-        </div>
-        <img id="hideTheme" class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="padding-right: 10px;">
-    </nav>
     <body id="body">
+        <nav>
+            <img class="themeToggle" src="FinalRepublic_GIF_logo.gif" alt="emoji logo">
+            <div class="topnav">
+    
+                <div class="dropdownParent">
+                    <a href="index.html">Home</a>
+                </div>
+                
+                <div class="dropdownParent" id="dropdownParentHist">
+                    <a onclick="visibility('histDrop')">History</a>
+                    <div style="display: none;" class="dropdown" id="histDrop">
+                        <a href="wiki.html">Wiki</a><br>
+                        <a href="downloads.html">Worlds</a>
+                    </div>
+                </div>
+                
+                <div class="dropdownParent" id="dropdownParentInfo">
+                    <a>Info</a>
+                    <div style="display: none;" class="dropdown" id="infoDrop">
+                        <a href="map.html">Map</a><br>
+                        <a href="forum.html">Forums</a>
+                    </div>
+                </div>
+    
+                <div class="dropdownParent">
+                    <a href="about.html">About</a>
+                </div>
+    
+            </div>
+            <img class="themeToggle" style="padding-right: 10px;" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle">
+        </nav>
         <div class="center">
             <div id="showWhenArticle" style="display: none;">
                 <a onclick="toggleArticles(undefined, true)">< < < Return back to the Wiki</a><br>
@@ -77,293 +98,318 @@
             </div>
         </div>
         <div style="padding: 18em"></div>
-    </body>
-    <button id="scrollToTopButton" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">Scroll to Top</button>
-    <footer id="footer">
-        <p style="text-align: center;">
-            | &copy; 2022-2023 The Final Republic, FinalRepublic
-            | GPL v3 ; Open to Contributors ; Hosted on <a href="https://github.com/GirlInPurple/frwebsite">Github</a> and <a href="https://www.fl0.com/">FL0</a> ; Last Updated <a id="commitDate"></a>
-            | Not an offical Minecraft product ; Not approved by or associated with Mojang Studios
-            | <a href="contact.html">Contact, Legal, About</a>
-            | <a onclick="document.getElementById('footer').style.display = 'none';">Click here to hide footer</a> |
-        </p>
-    </footer>
-    <script>
+        <button id="scrollToTopButton" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">Scroll to Top</button>
+        <footer id="footer">
+            <p style="text-align: center;">
+                | &copy; 2022-2023 The Final Republic, FinalRepublic
+                | GPL v3 ; Open to Contributors ; Hosted on <a href="https://github.com/GirlInPurple/frwebsite">Github</a> and <a href="https://www.fl0.com/">FL0</a> ; Last Updated <a id="commitDate"></a>
+                | Not an offical Minecraft product ; Not approved by or associated with Mojang Studios
+                | <a href="contact.html">Contact, Legal, About</a>
+                | <a onclick="document.getElementById('footer').style.display = 'none';">Click here to hide footer</a> |
+            </p>
+        </footer>
+        <script>
 
-        document.getElementById('searchInput').addEventListener('input', async function(){
-                await wikiSearchAlgor()
-                refreshNumberText()
-        });
-
-        window.addEventListener('scroll', function() {
-            // get the threshold, scroll pos, and id of button
-            var threshold = 0.05 * document.documentElement.scrollHeight;
-            var scrollPosition = window.scrollY || window.pageYOffset;
-            const scrollToTopButton = document.getElementById('scrollToTopButton');
-
-            // magic the button into existence
-            if (scrollPosition > threshold) {
-                scrollToTopButton.style.display = 'block';
-            } else {
-                scrollToTopButton.style.display = 'none';
-            }
-        });
-
-        window.onload = async function(){
-            // Set the theme based on the value in localStorage
-            let darkMode = localStorage.getItem('darkMode') === 'true';
-            let themeStylesheet = document.getElementById('themeStylesheet');
-            themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
-
-            let width = window.innerWidth;
-            console.log(width)
-            if (width <= 500){
-                document.getElementById("hideGif").style.display = 'none'
-                document.getElementById("hideTheme").style.display = 'none'
-            }
-            await getLatestCommit()
-            await startWikiSys()
-        }
-
-        // This function toggles between light and dark mode
-        function toggleTheme() {
-            let themeStylesheet = document.getElementById('themeStylesheet');
-            let darkMode = localStorage.getItem('darkMode') === 'true';
-            if (darkMode) {
-                themeStylesheet.href = 'light.css';
-                localStorage.setItem('darkMode', 'false');
-            } else {
-                themeStylesheet.href = 'dark.css';
-                localStorage.setItem('darkMode', 'true');
-            }
-        }
-
-        async function getLatestCommit() {
-            await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("commitDate").innerHTML = data[0].commit.author.date;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        // original by ousmblueninja, rewrite by djzombiehunter
-        async function wikiSearchAlgor() {
-            // artificial loading time, also fixes a graphical issue with highlighting
-            let tempCooldown = Math.floor(Math.random()*500)
-            clearTimeout(this.searchTimeout);
-            this.searchTimeout = setTimeout(() => {
-
-                var searchQueries = document.getElementById('searchInput').value.toLowerCase().trim().split(' ');
-                var articles = document.querySelectorAll("article");
-
-                // repeat for how many articles there are
-                for (let i = 0; i < articles.length; i++) {
-                    // finds all elements you can search into
-                    var article = articles[i];
-                    var titleElement = article.querySelector("h2");
-                    var contentElements = article.querySelectorAll("p");
-                    var tags = Array.from(article.querySelectorAll(".tag")).map(tag => tag.textContent.toLowerCase());
-
-                    // change title of page to lowercase to help with search results
-                    try {
-                        var title = titleElement.textContent.toLowerCase();
-                        var content = article.textContent.toLowerCase();
-                    } catch (error) {
-                        console.error(`tried to lowercase some text; ${error}`)
-                    }
-
-                    // check if all the search queries are present in either the title, content, or tags
-                    var allQueriesMatch = searchQueries.every(query => {
-                        var isTagSearch = query.startsWith("#");
-                        if (isTagSearch) {
-                            query = query.substring(1);
-                            return tags.includes(query);
-                        } else {
-                            return title.includes(query) || content.includes(query);
-                        }
-                    });
-
-                    // show or hide the article based on matches
-                    article.style.display = allQueriesMatch ? "block" : "none";
-
-                    // highlight the search queries in the title and content
-                    // this code is broken and makes <a> elements stop working due to how it handles classes
-                    // please change this.
-                    /*
-                    if (allQueriesMatch) {
-                        searchQueries.forEach(query => {
-                            var regex = new RegExp(query, 'gi');
-                            titleElement.innerHTML = titleElement.textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
-                            contentElements.forEach(contentElement => {
-                                contentElement.innerHTML = contentElement.textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
-                            });
-                        });
-                    }
-                    */
-                }
-                // finds all visible article elements
-                var visibleCount = 0;
-                for (let i = 0; i < articles.length; i++) {
-                    if (articles[i].offsetWidth > 0 && articles[i].offsetHeight > 0) {
-                        visibleCount++;
-                    }
-                }
-            }, tempCooldown ); // Delay in milliseconds
-        }
-
-        function insertTag(inputTag) {
-            let searchInput = document.getElementById('searchInput')
-            searchInput.value = `${searchInput.value} #${inputTag}`
-        }
-
-        function refreshNumberText(){
-            // number of articles now updates automatically
-            document.getElementById("numberOfArticles").innerHTML = `Number Of Articles : ${document.querySelectorAll("article").length/2}`
-            // to fix a graphical bug on page load
-            document.getElementById("numberOfSuccesses").innerHTML = `Number Of Results for \"${document.getElementById('searchInput').value}\" : ${document.querySelectorAll("article").length/2}`
-        }
-
-        function toggleArticles(href, show = false) { // spaghetti code
-
-            // grab all the needed elements
-            let articles = document.getElementsByTagName('article')
-            let dashHide = document.getElementById('hideWhenArticle')
-            let dashShow = document.getElementById('showWhenArticle')
-            let lastArticle = document.getElementById('lastViewed')
-            let errorArticle = document.getElementById('dead-links')
-
-            let safeArticle = '';
-            if (href == undefined) {
-                for(let i = 0; i < articles.length; i++) {
-                    if (articles[i].style.display == 'block') {
-                        safeArticle = articles[i];
-                        break;
-                    }
-                }
-            } else {
-                safeArticle = document.getElementById(href.replace('#', ''))
+            window.onload = async function() {
+                setTheme();
+                setupHover('dropdownParentHist', 'histDrop');
+                setupHover('dropdownParentInfo', 'infoDrop');
+                handleMobileSupport();
+                await getLatestCommit()
+                await startWikiSys()
             }
 
-            // hide EVERYTHING
-            dashHide.style.display = 'none'
-            for(let i = 0; i < articles.length; i++) {
-                articles[i].style.display = 'none';
-            }
-
-            // show the needed article
-            try {safeArticle.style.display = 'block';} catch(error) {console.error(error); errorArticle.style.display = 'block';}
-            dashShow.style.display = 'block';
-            window.scrollTo({top: 0});
-
-            if (show != false) {
-                try {safeArticle.style.display = 'none';} catch(error) {console.error(error); errorArticle.style.display = 'block';}
-                dashHide.style.display = 'block'
-                dashShow.style.display = 'none';
-                for(let i = 0; i < articles.length; i++) {
-                    if (articles[i].id.includes('splice')) {
-                        articles[i].style.display = 'block';
-                    } else {
-                        articles[i].style.display = 'none';
-                    }
-                }
-            }
-
-        }
-
-        function linkHandling() {
-            // link validity on all links at once
-            let links = document.querySelectorAll('a[href^="#"]');
-            for(var i = 0; i < links.length; i++) {
-                let href = links[i].getAttribute('href')
-                if (href.includes("#")) { // line will throw an error when loading the footer's HREF value. please ignore.
-                    // get href of the link minus the #
-                    var articleId = links[i].getAttribute('href').substring(1);
-                    // check if the article exists
-                    var articleExists = document.getElementById(articleId) !== null;
-                    // update tooltip
-                    if (articleExists) {
-                        links[i].title = links[i].innerText + "\nClick to Visit Article";
-                    } else {
-                        links[i].title = links[i].innerText + "\nArticle Does Not Exist";
-                        links[i].style.color = "rgb(256, 64, 64)";
-                    }
-                }
-            }
-
-            // add a click listener to each link, VERY resource heavy but fuck it, it will work
-            for (var i = 0; i < links.length; i++) {
-                links[i].addEventListener('click', function(event) {
-                    // i honestly dont know what this does but the internet says to add it
-                    event.preventDefault(); 
-                    // hide all but the needed link
-                    toggleArticles(this.getAttribute('href'))
-                });
-            }
-        }
-        
-        function addInputBoxes(json, array, inject){
-            for (let searchIndex = 0; searchIndex < json[array].length; searchIndex++) {
-                // Checkbox
-                let eleBox = document.createElement("input");
-                eleBox.type = 'checkbox';
-                eleBox.id = json[array][searchIndex];
-                eleBox.name = json[array][searchIndex];
-                eleBox.value = json[array][searchIndex];
-                inject.appendChild(eleBox);
-                // Label
-                eleBox = document.createElement("label");
-                eleBox.for = json[array][searchIndex];
-                eleBox.innerHTML = json[array][searchIndex];
-                inject.appendChild(eleBox);
-                // Spacer
-                eleBox = document.createElement("br");
-                inject.appendChild(eleBox);
-            }
-        }
-
-        async function startWikiSys(){
-            await fetch('https://api.github.com/repos/GirlInPurple/frwebsite/git/trees/wiki?recursive=1')
-                .then(response => response.text())
-                .then(async(data) => {
-                    wikiJsonData = JSON.parse(data)
-                    wikiJsonData = wikiJsonData.tree.map(item => item.path)
-
-                    // make all the articles
-                    for (let articleIndex = 0; articleIndex < wikiJsonData.length; articleIndex++) {
-                        if (wikiJsonData[articleIndex].endsWith('.json')){
-                            return
-                        }
-                        await fetch(`https://raw.githubusercontent.com/GirlInPurple/frwebsite/wiki/${wikiJsonData[articleIndex]}`)
-                            .then(response => response.text())
-                            .then(data => {
-
-                                // making article
-                                let articleElement = document.getElementById('wikiContent')
-                                let eleSplice = document.createElement("article");
-                                let eleFront = document.createElement("article");
-
-                                let converter = new showdown.Converter()
-                                // loading splice article
-                                eleSplice.innerHTML = `${converter.makeHtml(data).substring(0,500)}... <a href="#${wikiJsonData[articleIndex].split(".")[0]}">(click here to read more)<a>`
-                                eleSplice.id = `${wikiJsonData[articleIndex].split(".")[0]}-splice`;
-                                eleSplice.style.fontSize = '10px'
-                                articleElement.appendChild(eleSplice);
-                                // loading fronting article
-                                eleFront.innerHTML = converter.makeHtml(data)
-                                eleFront.id = wikiJsonData[articleIndex].split(".")[0];
-                                eleFront.style.display = 'none'
-                                articleElement.appendChild(eleFront);
-                            })
-                                
-                    };
-
+            document.getElementById('searchInput').addEventListener('input', async function() {
+                    await wikiSearchAlgor()
                     refreshNumberText()
-                    linkHandling()
+            });
+    
+            window.addEventListener('scroll', function() {
+                // get the threshold, scroll pos, and id of button
+                var threshold = 0.05 * document.documentElement.scrollHeight;
+                var scrollPosition = window.scrollY || window.pageYOffset;
+                const scrollToTopButton = document.getElementById('scrollToTopButton');
+    
+                // magic the button into existence
+                if (scrollPosition > threshold) {
+                    scrollToTopButton.style.display = 'block';
+                } else {
+                    scrollToTopButton.style.display = 'none';
+                }
+            });
 
-                }).catch((error) => {
-                    console.error('Error:', error);
+            function setTheme() {
+                let darkMode = localStorage.getItem('darkMode') === 'true';
+                let themeStylesheet = document.getElementById('themeStylesheet');
+                themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
+            }
+
+            function setupHover(parentId, childId) {
+                let parent = document.getElementById(parentId);
+                let child = document.getElementById(childId);
+                parent.addEventListener('mouseover', function() {
+                    child.style.display = 'block';
                 });
-        }
-    </script>
+                parent.addEventListener('mouseout', function() {
+                    child.style.display = 'none';
+                });
+            }
+
+            function handleMobileSupport() {
+                let width = window.innerWidth;
+                if (width <= 500){
+                    document.getElementById("hideGif").style.display = 'none'
+                    document.getElementById("hideTheme").style.display = 'none'
+                }
+            }
+
+            function visibility(id) {
+                    var ele = document.getElementById(id);
+                    if (ele.style.display === 'none') {
+                        ele.style.display = 'block';
+                    } else {
+                        ele.style.display = 'none';
+                    }
+                }
+
+            function toggleTheme() {
+                let themeStylesheet = document.getElementById('themeStylesheet');
+                let darkMode = localStorage.getItem('darkMode') === 'true';
+                if (darkMode) {
+                    themeStylesheet.href = 'light.css';
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    themeStylesheet.href = 'dark.css';
+                    localStorage.setItem('darkMode', 'true');
+                }
+            }
+
+            function insertTag(inputTag) {
+                document.getElementById('searchInput').value = `${searchInput.value} #${inputTag}`
+            }
+    
+            function refreshNumberText() {
+                // number of articles now updates automatically
+                document.getElementById("numberOfArticles").innerHTML = `Number Of Articles : ${document.querySelectorAll("article").length/2}`
+                // to fix a graphical bug on page load
+                document.getElementById("numberOfSuccesses").innerHTML = `Number Of Results for \"${document.getElementById('searchInput').value}\" : ${document.querySelectorAll("article").length/2}`
+            }
+    
+            function toggleArticles(href, show = false) { // spaghetti code
+    
+                // grab all the needed elements
+                let articles = document.getElementsByTagName('article')
+                let dashHide = document.getElementById('hideWhenArticle')
+                let dashShow = document.getElementById('showWhenArticle')
+                let lastArticle = document.getElementById('lastViewed')
+                let errorArticle = document.getElementById('dead-links')
+    
+                let safeArticle = '';
+                if (href == undefined) {
+                    for(let i = 0; i < articles.length; i++) {
+                        if (articles[i].style.display == 'block') {
+                            safeArticle = articles[i];
+                            break;
+                        }
+                    }
+                } else {
+                    safeArticle = document.getElementById(href.replace('#', ''))
+                }
+    
+                // hide EVERYTHING
+                dashHide.style.display = 'none'
+                for(let i = 0; i < articles.length; i++) {
+                    articles[i].style.display = 'none';
+                }
+    
+                // show the needed article
+                try {safeArticle.style.display = 'block';} catch(error) {console.error(error); errorArticle.style.display = 'block';}
+                dashShow.style.display = 'block';
+                window.scrollTo({top: 0});
+    
+                if (show != false) {
+                    try {safeArticle.style.display = 'none';} catch(error) {console.error(error); errorArticle.style.display = 'block';}
+                    dashHide.style.display = 'block'
+                    dashShow.style.display = 'none';
+                    for(let i = 0; i < articles.length; i++) {
+                        if (articles[i].id.includes('splice')) {
+                            articles[i].style.display = 'block';
+                        } else {
+                            articles[i].style.display = 'none';
+                        }
+                    }
+                }
+    
+            }
+    
+            function linkHandling() {
+                // link validity on all links at once
+                let links = document.querySelectorAll('a[href^="#"]');
+                for(var i = 0; i < links.length; i++) {
+                    let href = links[i].getAttribute('href')
+                    if (href.includes("#")) { // line will throw an error when loading the footer's HREF value. please ignore.
+                        // get href of the link minus the #
+                        var articleId = links[i].getAttribute('href').substring(1);
+                        // check if the article exists
+                        var articleExists = document.getElementById(articleId) !== null;
+                        // update tooltip
+                        if (articleExists) {
+                            links[i].title = links[i].innerText + "\nClick to Visit Article";
+                        } else {
+                            links[i].title = links[i].innerText + "\nArticle Does Not Exist";
+                            links[i].style.color = "rgb(256, 64, 64)";
+                        }
+                    }
+                }
+    
+                // add a click listener to each link, VERY resource heavy but fuck it, it will work
+                for (var i = 0; i < links.length; i++) {
+                    links[i].addEventListener('click', function(event) {
+                        // i honestly dont know what this does but the internet says to add it
+                        event.preventDefault(); 
+                        // hide all but the needed link
+                        toggleArticles(this.getAttribute('href'))
+                    });
+                }
+            }
+            
+            function addInputBoxes(json, array, inject) {
+                for (let searchIndex = 0; searchIndex < json[array].length; searchIndex++) {
+                    // Checkbox
+                    let eleBox = document.createElement("input");
+                    eleBox.type = 'checkbox';
+                    eleBox.id = json[array][searchIndex];
+                    eleBox.name = json[array][searchIndex];
+                    eleBox.value = json[array][searchIndex];
+                    inject.appendChild(eleBox);
+                    // Label
+                    eleBox = document.createElement("label");
+                    eleBox.for = json[array][searchIndex];
+                    eleBox.innerHTML = json[array][searchIndex];
+                    inject.appendChild(eleBox);
+                    // Spacer
+                    eleBox = document.createElement("br");
+                    inject.appendChild(eleBox);
+                }
+            }
+        
+            async function getLatestCommit() {
+                await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("commitDate").innerHTML = data[0].commit.author.date;
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+    
+            async function wikiSearchAlgor() {
+                // original by ousmblueninja, rewrite by djzombiehunter
+                // artificial loading time, also fixes a graphical issue with highlighting
+                let tempCooldown = Math.floor(Math.random()*500)
+                clearTimeout(this.searchTimeout);
+                this.searchTimeout = setTimeout(() => {
+    
+                    var searchQueries = document.getElementById('searchInput').value.toLowerCase().trim().split(' ');
+                    var articles = document.querySelectorAll("article");
+    
+                    // repeat for how many articles there are
+                    for (let i = 0; i < articles.length; i++) {
+                        // finds all elements you can search into
+                        var article = articles[i];
+                        var titleElement = article.querySelector("h2");
+                        var contentElements = article.querySelectorAll("p");
+                        var tags = Array.from(article.querySelectorAll(".tag")).map(tag => tag.textContent.toLowerCase());
+    
+                        // change title of page to lowercase to help with search results
+                        try {
+                            var title = titleElement.textContent.toLowerCase();
+                            var content = article.textContent.toLowerCase();
+                        } catch (error) {
+                            console.error(`tried to lowercase some text; ${error}`)
+                        }
+    
+                        // check if all the search queries are present in either the title, content, or tags
+                        var allQueriesMatch = searchQueries.every(query => {
+                            var isTagSearch = query.startsWith("#");
+                            if (isTagSearch) {
+                                query = query.substring(1);
+                                return tags.includes(query);
+                            } else {
+                                return title.includes(query) || content.includes(query);
+                            }
+                        });
+    
+                        // show or hide the article based on matches
+                        article.style.display = allQueriesMatch ? "block" : "none";
+    
+                        // highlight the search queries in the title and content
+                        // this code is broken and makes <a> elements stop working due to how it handles classes
+                        // please change this.
+                        /*
+                        if (allQueriesMatch) {
+                            searchQueries.forEach(query => {
+                                var regex = new RegExp(query, 'gi');
+                                titleElement.innerHTML = titleElement.textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
+                                contentElements.forEach(contentElement => {
+                                    contentElement.innerHTML = contentElement.textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
+                                });
+                            });
+                        }
+                        */
+                    }
+                    // finds all visible article elements
+                    var visibleCount = 0;
+                    for (let i = 0; i < articles.length; i++) {
+                        if (articles[i].offsetWidth > 0 && articles[i].offsetHeight > 0) {
+                            visibleCount++;
+                        }
+                    }
+                }, tempCooldown ); // Delay in milliseconds
+            }
+    
+            async function startWikiSys() {
+                await fetch('https://api.github.com/repos/GirlInPurple/frwebsite/git/trees/wiki?recursive=1')
+                    .then(response => response.text())
+                    .then(async(data) => {
+                        wikiJsonData = JSON.parse(data)
+                        wikiJsonData = wikiJsonData.tree.map(item => item.path)
+    
+                        // make all the articles
+                        for (let articleIndex = 0; articleIndex < wikiJsonData.length; articleIndex++) {
+                            if (wikiJsonData[articleIndex].endsWith('.json')){
+                                continue;
+                            }
+                            await fetch(`https://raw.githubusercontent.com/GirlInPurple/frwebsite/wiki/${wikiJsonData[articleIndex]}`)
+                                .then(response => response.text())
+                                .then(data => {
+    
+                                    // making article
+                                    let articleElement = document.getElementById('wikiContent')
+                                    let eleSplice = document.createElement("article");
+                                    let eleFront = document.createElement("article");
+    
+                                    let converter = new showdown.Converter()
+                                    // loading splice article
+                                    eleSplice.innerHTML = `${converter.makeHtml(data).substring(0,500)}... <a href="#${wikiJsonData[articleIndex].split(".")[0]}">(click here to read more)<a>`
+                                    eleSplice.id = `${wikiJsonData[articleIndex].split(".")[0]}-splice`;
+                                    eleSplice.style.fontSize = '10px'
+                                    articleElement.appendChild(eleSplice);
+                                    // loading fronting article
+                                    eleFront.innerHTML = converter.makeHtml(data)
+                                    eleFront.id = wikiJsonData[articleIndex].split(".")[0];
+                                    eleFront.style.display = 'none'
+                                    articleElement.appendChild(eleFront);
+                                })
+                                    
+                        };
+    
+                        refreshNumberText()
+                        linkHandling()
+    
+                    }).catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
+        </script>
+    </body>
 </html>

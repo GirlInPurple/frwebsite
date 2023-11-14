@@ -22,16 +22,36 @@
     <body id="body" style="background-image: url(/background.png); position: absolute; top: -20%; width: 100%; background-repeat: no-repeat; background-attachment: fixed;">
         <div style="padding: 7%;"><!-- breaks site if removed!!! --></div>
         <div class="center" style="height: 900px;">
-            <nav class="tab" style="background-image: none;">
-                <img src="FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:8%;">
+            <nav style="background-image: none;">
+                <img class="themeToggle" src="FinalRepublic_GIF_logo.gif" alt="emoji logo">
                 <div class="topnav">
-                    <a class="active" href="index.html">Home</a>
-                    <a href="wiki.html">Wiki</a>
-                    <a href="map.html">Map</a>
-                    <a href="about.html">About</a>
+        
+                    <div class="dropdownParent">
+                        <a href="index.html">Home</a>
+                    </div>
+                    
+                    <div class="dropdownParent" id="dropdownParentHist">
+                        <a onclick="visibility('histDrop')">History</a>
+                        <div style="display: none;" class="dropdown" id="histDrop">
+                            <a href="wiki.html">Wiki</a><br>
+                            <a href="downloads.html">Worlds</a>
+                        </div>
+                    </div>
+                    
+                    <div class="dropdownParent" id="dropdownParentInfo">
+                        <a>Info</a>
+                        <div style="display: none;" class="dropdown" id="infoDrop">
+                            <a href="map.html">Map</a><br>
+                            <a href="forum.html">Forums</a>
+                        </div>
+                    </div>
+        
+                    <div class="dropdownParent">
+                        <a href="about.html">About</a>
+                    </div>
+        
                 </div>
-                <img class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:8%; max-height: 8%;">
-                <b><p id="splashText" onload="changeSplashText()" onclick="changeSplashText()" class="splashText"></p></b>
+                <img class="themeToggle" style="padding-right: 10px;" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle">
             </nav>
             <div id="sidebarDiv" class="sidebarParent">
                 <a onclick="document.getElementById('sidebarDiv').style.display = 'none'; document.getElementById('contentDiv').style.width = '100%';" class="smalltext">click to hide sidebar</a>
@@ -107,6 +127,25 @@
             let darkMode = localStorage.getItem('darkMode') === 'true';
             let themeStylesheet = document.getElementById('themeStylesheet');
             themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
+            
+            // set up hover on the nav
+            let histDropParent = document.getElementById('dropdownParentHist');
+            let histDrop = document.getElementById('histDrop');
+            histDropParent.addEventListener('mouseover', function() {
+                histDrop.style.display = 'block';
+            });
+            histDropParent.addEventListener('mouseout', function() {
+                histDrop.style.display = 'none';
+            });
+
+            let infoDropParent = document.getElementById('dropdownParentInfo');
+            let infoDrop = document.getElementById('infoDrop');
+            infoDropParent.addEventListener('mouseover', function() {
+                infoDrop.style.display = 'block';
+            });
+            infoDropParent.addEventListener('mouseout', function() {
+                infoDrop.style.display = 'none';
+            });
             
             let width = window.innerWidth;
             console.log(width)

@@ -8,7 +8,7 @@ body {
     overflow-x: hidden;
 }
 
-nav.tab {
+nav {
     display: flex;
     position: relative;
     justify-content: center;
@@ -31,6 +31,7 @@ a:hover, a:visited {
 
 /* Add a black background color to the top navigation */
 .topnav {
+    display: flex;
     background-color: #d5d5d5;
     overflow: hidden;
     padding: 10px;
@@ -65,6 +66,24 @@ a:hover, a:visited {
 .topnav a.active {
     background-color: #04AA6D;
     color: white;
+}
+
+div.dropdown a {
+    background-color: #efefef;
+}
+
+div.dropdown a:hover {
+    background-color: #ddd;
+}
+
+div.dropdown {
+    position: absolute;
+    top: 65px;
+    z-index: 5;
+}
+
+.dropdownParent a {
+    width: 50px;
 }
 
 img.themeToggle {

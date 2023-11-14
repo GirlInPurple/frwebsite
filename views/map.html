@@ -11,7 +11,7 @@
         <meta name="theme-color" content="#bd97bd">
 
         <!-- make the website look good -->
-        <title>Wiki | Final Republic</title>
+        <title>Map | Final Republic</title>
         <link id="themeStylesheet" rel="stylesheet" href="light.css">
         <link rel="icon" href="FinalRepublic_GIF_logo.gif"> <!-- https://en.wikipedia.org/wiki/Favicon#Image_file_format_support -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script> <!-- wiki library -->
@@ -21,17 +21,38 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     </head>
-    <nav class="tab">
-        <img src="FinalRepublic_GIF_logo.gif" alt="emoji logo" style="max-width:4%; max-height:4%;">
-        <div class="topnav">
-            <a href="index.html">Home</a>
-            <a href="wiki.html">Wiki</a>
-            <a href="map.html">Map</a>
-            <a href="about.html">About</a>
-        </div>
-        <img class="themeToggle" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle" style="max-width:4%; max-height:4%;">
-    </nav>
     <body id="body">
+        <nav>
+            <img class="themeToggle" src="FinalRepublic_GIF_logo.gif" alt="emoji logo">
+            <div class="topnav">
+    
+                <div class="dropdownParent">
+                    <a href="index.html">Home</a>
+                </div>
+                
+                <div class="dropdownParent" id="dropdownParentHist">
+                    <a onclick="visibility('histDrop')">History</a>
+                    <div style="display: none;" class="dropdown" id="histDrop">
+                        <a href="wiki.html">Wiki</a><br>
+                        <a href="downloads.html">Worlds</a>
+                    </div>
+                </div>
+                
+                <div class="dropdownParent" id="dropdownParentInfo">
+                    <a>Info</a>
+                    <div style="display: none;" class="dropdown" id="infoDrop">
+                        <a href="map.html">Map</a><br>
+                        <a href="forum.html">Forums</a>
+                    </div>
+                </div>
+    
+                <div class="dropdownParent">
+                    <a href="about.html">About</a>
+                </div>
+    
+            </div>
+            <img class="themeToggle" style="padding-right: 10px;" onclick="toggleTheme()" src="https://cdn2.iconfinder.com/data/icons/weather-154/100/weather_cloud_clouds_nature-46-512.png" alt="Dark / Light Mode Toggle">
+        </nav>
         <div class="center">
             <p>If you see this for longer than a second, click <a href="" id="redirectText">here</a> to to to the map.</p>
             <script>
@@ -40,16 +61,68 @@
                 window.location.replace(redirect);
             </script>
         </div>
-    </body>
-    <footer id="footer">
-        <p style="text-align: center;">
-            | &copy; 2022-2023 The Final Republic, FinalRepublic
-            | GPL v3 ; Open to Contributors ; Hosted on <a href="https://github.com/GirlInPurple/frwebsite">Github</a> and <a href="https://www.fl0.com/">FL0</a> ; Last Updated <a id="commitDate"></a>
-            | Not an offical Minecraft product ; Not approved by or associated with Mojang Studios
-            | <a href="contact.html">Contact, Legal, About</a>
-            | <a onclick="document.getElementById('footer').style.display = 'none';">Click here to hide footer</a> |
-        </p>
+        <footer id="footer">
+            <p style="text-align: center;">
+                | &copy; 2022-2023 The Final Republic, FinalRepublic
+                | GPL v3 ; Open to Contributors ; Hosted on <a href="https://github.com/GirlInPurple/frwebsite">Github</a> and <a href="https://www.fl0.com/">FL0</a> ; Last Updated <a id="commitDate"></a>
+                | Not an offical Minecraft product ; Not approved by or associated with Mojang Studios
+                | <a href="contact.html">Contact, Legal, About</a>
+                | <a onclick="document.getElementById('footer').style.display = 'none';">Click here to hide footer</a> |
+            </p>
+        </footer>
         <script>
+            // this is the main script element
+            // to keep everything organized all JS needs to be located here
+            // (unless desperately needed)
+
+            // this code runs when the page loads
+            // this must be located at the top of this script element
+            window.onload = async function() {
+                // Set the theme based on the value in localStorage
+                let darkMode = localStorage.getItem('darkMode') === 'true';
+                let themeStylesheet = document.getElementById('themeStylesheet');
+                themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
+                
+                // set up hover on the nav
+                let histDropParent = document.getElementById('dropdownParentHist');
+                let histDrop = document.getElementById('histDrop');
+                histDropParent.addEventListener('mouseover', function() {
+                    histDrop.style.display = 'block';
+                });
+                histDropParent.addEventListener('mouseout', function() {
+                    histDrop.style.display = 'none';
+                });
+
+                let infoDropParent = document.getElementById('dropdownParentInfo');
+                let infoDrop = document.getElementById('infoDrop');
+                infoDropParent.addEventListener('mouseover', function() {
+                    infoDrop.style.display = 'block';
+                });
+                infoDropParent.addEventListener('mouseout', function() {
+                    infoDrop.style.display = 'none';
+                });
+
+                // mobile support
+                let width = window.innerWidth;
+                console.log(width)
+                if (width <= 500){
+                    document.getElementById("hideGif").style.display = 'none'
+                    document.getElementById("hideTheme").style.display = 'none'
+                }
+
+                // Get the latest commit
+                await getLatestCommit();
+            }
+            
+            function visibility(id) {
+                var ele = document.getElementById(id);
+                if (ele.style.display === 'none') {
+                    ele.style.display = 'block';
+                } else {
+                    ele.style.display = 'none';
+                }
+            }
+
             // This function toggles between light and dark mode
             function toggleTheme() {
                 let themeStylesheet = document.getElementById('themeStylesheet');
@@ -73,19 +146,8 @@
                     .catch(error => console.error('Error:', error));
             }
         
-            // This code runs when the page loads
-            window.onload = async function() {
-                // Set the theme based on the value in localStorage
-                let darkMode = localStorage.getItem('darkMode') === 'true';
-                let themeStylesheet = document.getElementById('themeStylesheet');
-                themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
-        
-                // Get the latest commit
-                await getLatestCommit();
-            }
-        
             // This code runs when the theme toggle element is clicked
             document.querySelector('.themeToggle').addEventListener('click', toggleTheme);
         </script>
-    </footer>
+    </body>
 </html>
