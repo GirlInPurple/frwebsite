@@ -1,5 +1,5 @@
 # [AdaxJosue's Map Triangulation Technique](#map-triangulation)
-___Tags: <span class="tag tag-purple">Guide</span><span class="tag tag-green">2022</span><space></space><span class="tag tag-blue">English</span><span class="tag tag-blurple">DJzombiehunter</span>___
+___Tags:<span class="tag tag-purple">Guide</span><span class="tag tag-green">2022</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 ### Origin
 

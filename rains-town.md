@@ -1,5 +1,5 @@
 # [RainForCraft's Town](#rains-town)
-___Tags: ___
+___Tags:<span class="tag tag-green">Location</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 ### Summary
 
 A medium-sized town just west of Spawn City, where Roads 1, 3, and 6 converge, plus the Oak Line and Rain City LRT. It is one of the most influential cities on the map, behind Spawn City, Nether Bay, Borderlands, and Spawn City, having alot of the significant events of the [Great Escalation](#great-escalation) occur in its borders.

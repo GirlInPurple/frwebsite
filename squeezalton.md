@@ -1,5 +1,5 @@
 # [Squeezalton](#squeezalton)
-___Tags: ___
+___Tags:<span class="tag tag-green">Location</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 _Not to be confused with [@squeezal (Player)](#squeezal), [Squeezaltopia (Server)](#squeezaltopia-server), or [Squeezaltopia (Spawn City)](#squeezaltopia-town)_
 

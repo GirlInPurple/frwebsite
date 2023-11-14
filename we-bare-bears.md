@@ -1,5 +1,5 @@
 # [We Bare Bears](#we-bare-bears)
-___Tags: ___
+___Tags:<span class="tag tag-green">Location</span><span class="tag tag-purple">Guide</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 We Bare Bears is a player group established for record-keeping purposes. Additionally, they have set up a town within the server, making them a noteworthy group in our community.
 

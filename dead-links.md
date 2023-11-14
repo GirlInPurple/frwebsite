@@ -1,5 +1,5 @@
 # [Dead Links](#dead-links)
-___Tags: <span class="tag tag-purple">Guide</span><span class="tag tag-cyan">Special</span><span class="tag tag-blurple">DJzombiehunter</span>___
+___Tags:<span class="tag tag-purple">Guide</span><span class="tag tag-cyan">Special</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 If you've gotten here, you got here in two ways;
 

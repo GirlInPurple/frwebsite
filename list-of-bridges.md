@@ -1,5 +1,5 @@
 # [List of Bridges](#list-of-bridges)
-___Tags: ___
+___Tags:<span class="tag tag-green">Location</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 The following is a list of all the bridges on the server, along with a short paragraph describing them.
 

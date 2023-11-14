@@ -1,5 +1,5 @@
-# [CaveTown Thuhai]()
-___Tags: ___
+# [CaveTown Thuhai](#second-cavetown)
+___Tags:<span class="tag tag-green">Location</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 _Not to be confused with [New CaveTown](#new-cavetown) or [Cavetown](#cavetown)_  
 _This page has been translated into the following: [Français](#second-cavetown-FR), [Tiếng Việt](#second-cavetown-VT)_

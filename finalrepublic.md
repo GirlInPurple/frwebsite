@@ -1,5 +1,5 @@
 # [FinalRepublic](#finalrepublic)
-___Tags: ___
+___Tags:<span class="tag tag-orange">Main Page</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 _For finalrepublic's sister servers; look here:  
 [Axeium](#axeium)  

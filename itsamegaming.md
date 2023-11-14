@@ -1,5 +1,5 @@
 # [ItSameGaming](#itsamegaming)
-___Tags: ___
+___Tags:<span class="tag tag-pink">Characters</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 ItSameGaming was one of many players to build a town on the server, specifically the town of [Below The Bedrock](#below-the-bedrock). Now, you might wonder what about them is so important that they deserve their own wiki article?
 

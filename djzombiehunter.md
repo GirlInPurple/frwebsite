@@ -1,5 +1,6 @@
 # [DJzombiehunter](#djzombiehunter)
-___Tags: ___
+___Tags:<span class="tag tag-pink">Characters</span><span class="tag tag-red">Pre-2021</span>
+<span class="tag tag-pink">2023</span>___
 
 ### Summary
 

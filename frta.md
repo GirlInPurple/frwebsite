@@ -1,5 +1,5 @@
 # [Final Republic Transportation Authority](#frta)
-___Tags: ___
+___Tags:<span class="tag tag-purple">Guide</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 _for a list of railways on the server, click [here](#railways)_
 _for the world router, click [here](#router)_

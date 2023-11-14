@@ -1,5 +1,5 @@
 # [Finalrepublic's Railways](#railways)
-___tags: ___
+___tags:<span class="tag tag-cyan">Obscure</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 #### [@BredTalk](#bredtalk)'s Personal Line
 

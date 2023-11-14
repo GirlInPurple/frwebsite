@@ -1,5 +1,5 @@
 # [The Spawn City Bombings](#spawn-city-bombings)
-___Tags: ___
+___Tags:<span class="tag tag-red">Conflict</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 ### Description
 

@@ -1,5 +1,5 @@
 # [List of Towns](#list-of-towns)
-___Tags: ___
+___Tags:<span class="tag tag-green">Location</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 ### Summary
 

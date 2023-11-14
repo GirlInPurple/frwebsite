@@ -1,5 +1,5 @@
-# [The Great Escalation]()
-___Tags: ___
+# [The Great Escalation](#great-escalation)
+___Tags:<span class="tag tag-red">Conflict</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 ### Introduction
 

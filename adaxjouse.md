@@ -1,5 +1,5 @@
 # [AdaxJosue](#adaxjouse)
-___Tags: ___
+___Tags:<span class="tag tag-pink">Characters</span><span class="tag tag-red">Pre-2021</span><span class="tag tag-blurple">DJzombiehunter</span><span class="tag tag-grey">OusmBlueNinja</span>___
 
 [@AdaxJosue](#adaxjosue) is the owner of [SouthCraft](#southcraft), the predecessor to FinalRepublic, and where more of the server's ideology came from. Beyond his in-game achievements, [@AdaxJosue](#adaxjosue) is known for his generally helpful and supportive nature, plus his ability to gather alot of people to help him.
 

@@ -1,5 +1,5 @@
 # [Yuri's Town](#yuris-town)
-___Tags: ___
+___Tags:<span class="tag tag-green">Location</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 ### Summary
 
