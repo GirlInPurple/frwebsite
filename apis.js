@@ -7,6 +7,7 @@ Most of this code isnt mine anyway, thanks stackoverflow
 */
 
 const { sleep, hexToDecimal, checkIPAddress } = require('./misc')
+const { sanitizeMarkdownInput } = require('./sanitize')
 const formData = require('form-data');
 const sanitize = require('sanitize');
 const dotenv = require('dotenv');
@@ -18,7 +19,7 @@ const webhookURL = process.env.WEBHOOK
 const githubApiKey = process.env.GITHUB
 let lastCall = Date.now();
 
-async function commitFileToRepo(repoOwner, repoName, branchName, filePath, fileContent, commitMessage) {
+async function commitFileToRepo(repoOwner, repoName, branchName, filePath, filePreFilter, commitMessage) {
     const headers = {
         'Authorization': `token ${githubApiKey}`,
         'Accept': 'application/vnd.github.v3+json'
@@ -36,7 +37,7 @@ async function commitFileToRepo(repoOwner, repoName, branchName, filePath, fileC
         await sleep(delay - (now - lastCall));
     }
     lastCall = Date.now();
-    
+
     // Step 1: Get the last commit SHA of the branch
     const branchRes = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/branches/${branchName}`, { headers });
     console.log(`branchRes: ${branchRes}`)
@@ -44,6 +45,7 @@ async function commitFileToRepo(repoOwner, repoName, branchName, filePath, fileC
     const lastCommitSha = branchData.commit.sha;
 
     // Step 2: Create a blob with the file's content
+    let fileContent = sanitizeMarkdownInput(filePreFilter)
     const blobRes = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/git/blobs`, {
         method: 'POST',
         headers,
@@ -149,11 +151,11 @@ async function wikiChannelWebhook(alias, ipAdrs, page, editId, notes, fileConten
 
     let tempFilePath = `${__dirname}/temp/${editUser}.md`;
     fs.writeFileSync(tempFilePath, fileContent);
-    
+
     let form = new formData();
     form.append('username', editUser);
     form.append('file', fs.createReadStream(tempFilePath), `${page}.md`);
-    
+
     await axios.post(webhookURL, form, {
         headers: form.getHeaders()
     }).then((response) => {
