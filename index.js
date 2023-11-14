@@ -54,7 +54,7 @@ http.createServer(async function (req, res) {
             await commitFileToRepo('GirlInPurple', 'frwebsite', 'wiki', 
                 `${dropdown}`, 
                 `${content}`, // sanitized = sanitize(fileContent, {allowedTags: ['br', 'div']})
-                `Update ${dropdown}.md; Notes from Editor; ${notes}`
+                `Update ${dropdown}; Notes from ${userAlias}; ${notes}`
             );
 
             res.writeHead(202, { 'Content-Type': 'text/html' })
