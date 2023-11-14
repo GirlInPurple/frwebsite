@@ -1,4 +1,26 @@
 {
-  "wiki":{},
-  "donations":1
+  "wiki": {
+    "tags": [
+      "Location",
+      "Conflict",
+      "Guide",
+      "Characters",
+      "Obscure",
+      "Group"
+    ],
+    "years": [
+      "pre-2021",
+      "2021",
+      "2022",
+      "2023",
+      "2024"
+    ],
+    "authors": [
+      "Anon",
+      "Blurple",
+      "Ousm",
+      "ToxicTrapper"
+    ]
+  },
+  "donations": 1
 }
