@@ -23,11 +23,8 @@ That doesnt mean Dead Links are bad though, it just means there is more work to 
 
 Below is a list of all the Dead Links with highest priority for writing. Ask around the Discord if you want to help with a page;
 
-*   [@bmbxbby](#bmbxbby)
 *   [The Borderlands](#the-borderlands)
-*   [World Origin Road](#world-origin-road)
 *   [Spawn City](#spawn-city)
-*   [@ItSameGaming](#itsamegaming)
 *   [@lionking234578](#lionking)
 
 Here is an image of what the console should say if you clicked a Dead Link;
