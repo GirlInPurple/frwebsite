@@ -4,6 +4,8 @@
 .vscode/
 
 # Logs
+temp/*
+!temp/file.md
 logs
 *.log
 npm-debug.log*

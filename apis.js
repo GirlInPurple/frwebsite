@@ -6,8 +6,7 @@ Most of this code isnt mine anyway, thanks stackoverflow
 
 */
 
-const { sleep, hexToDecimal, checkIPAddress } = require('./misc')
-const { sanitizeMarkdownInput } = require('./sanitize')
+const { sleep, hexToDecimal, checkIPAddress, sanitizeMarkdownInput } = require('./misc')
 const formData = require('form-data');
 const sanitize = require('sanitize');
 const dotenv = require('dotenv');

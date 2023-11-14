@@ -6,6 +6,27 @@ Most of this code isnt mine anyway, thanks stackoverflow
 
 */
 
+const { JSDOM } = require('jsdom');
+const { window } = new JSDOM('');
+const createDOMPurify = require('dompurify');
+const DOMPurify = createDOMPurify(window);
+
+const sanitizeMarkdown = require('sanitize-markdown');
+const TurndownService = require('turndown');
+const marked = require('marked')
+
+function sanitizeMarkdownInput(markdownInput) {
+    const turndownService = new TurndownService();
+    // Convert the Markdown input to HTML
+    const html = marked.parse(markdownInput);
+    // Sanitize the HTML using DOMPurify
+    const sanitizedHtml = DOMPurify.sanitize(html, { ALLOWED_TAGS: ['div', 'span'] });
+    // Convert the sanitized HTML back to Markdown
+    const sanitizedMarkdown = turndownService.turndown(sanitizedHtml);
+    // Sanitize the Markdown using sanitize-markdown
+    return sanitizeMarkdown(sanitizedMarkdown, { allowedTags: ['div','span'] });
+}
+
 function checkIPAddress(ip) {
     const regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     if (!regex.test(ip)) {
@@ -68,5 +89,6 @@ module.exports = {
     getBlockedIps,
     genHexString,
     hexToDecimal,
-    checkIPAddress
+    checkIPAddress,
+    sanitizeMarkdownInput
 };
