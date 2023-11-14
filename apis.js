@@ -6,7 +6,7 @@ Most of this code isnt mine anyway, thanks stackoverflow
 
 */
 
-const { sleep, hexToDecimal, checkIPAddress, sanitizeMarkdownInput } = require('./misc')
+const { sleep, hexToDecimal, sanitizeMarkdownInput } = require('./misc')
 const formData = require('form-data');
 const sanitize = require('sanitize');
 const dotenv = require('dotenv');
@@ -103,9 +103,7 @@ async function commitFileToRepo(repoOwner, repoName, branchName, filePath, fileP
     console.log(newCommitSha)
 }
 
-async function wikiChannelWebhook(alias, ipAdrs, page, editId, notes, fileContent) {
-
-    let ip = checkIPAddress(ipAdrs)
+async function wikiChannelWebhook(alias, ip, page, editId, notes, fileContent) {
 
     let editName = `IP: ${ip} | Alias: ${alias}`
     let editUser = `Final Republic Wiki (${editId})`
