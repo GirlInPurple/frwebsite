@@ -121,101 +121,101 @@
                 </p>
             </div>
         </div>
-    </body>
-    <script>
-        window.onload = async function(){
-            // Set the theme based on the value in localStorage
-            let darkMode = localStorage.getItem('darkMode') === 'true';
-            let themeStylesheet = document.getElementById('themeStylesheet');
-            themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
-            
-            // set up hover on the nav
-            let histDropParent = document.getElementById('dropdownParentHist');
-            let histDrop = document.getElementById('histDrop');
-            histDropParent.addEventListener('mouseover', function() {
-                histDrop.style.display = 'block';
-            });
-            histDropParent.addEventListener('mouseout', function() {
-                histDrop.style.display = 'none';
-            });
-
-            let infoDropParent = document.getElementById('dropdownParentInfo');
-            let infoDrop = document.getElementById('infoDrop');
-            infoDropParent.addEventListener('mouseover', function() {
-                infoDrop.style.display = 'block';
-            });
-            infoDropParent.addEventListener('mouseout', function() {
-                infoDrop.style.display = 'none';
-            });
-            
-            let width = window.innerWidth;
-            console.log(width)
-            if (width <= 900){
-                const redirect = 'index.mobile.html'
-                window.location.replace(redirect);
-            }
-
-            changeSplashText();
-            await getLatestCommit()
-            await updateDonoAmount()
-        };
-
-        function changeSplashText() {
-            const splashValues = [
-                "Quite the rarity 'init?",
-                "\"We are going to have some downtime\"",
-                "Now on 1.19.4!",
-                "RIP Skele Horse, 2023-2023 :(",
-                "16 Towns Total!",
-                "ERROR 418: Teapot not found!",
-                "Radioactive Spaghetti, 30k Calories of Fun!",
-                "\"Coming Soon!\" for 6 weeks!",
-                "we have too many trains and highways plz help",
-                "temp splash"
-            ]
-            const splashSizes = [17, 10, 19, 17, 18, 17, 10, 17, 9, 25]
-            const splashNumber = Math.min(Math.floor(Math.random() * 10), splashValues.length - 1)
-            const splashText = document.getElementById('splashText')
-            splashText.innerHTML = splashValues[splashNumber]
-            splashText.style.fontSize = `${splashSizes[splashNumber]}px`;
-        }
-
-        // This function toggles between light and dark mode
-        function toggleTheme() {
-            let themeStylesheet = document.getElementById('themeStylesheet');
-            let darkMode = localStorage.getItem('darkMode') === 'true';
-            if (darkMode) {
-                themeStylesheet.href = 'light.css';
-                localStorage.setItem('darkMode', 'false');
-            } else {
-                themeStylesheet.href = 'dark.css';
-                localStorage.setItem('darkMode', 'true');
-            }
-        }
-
-        async function getLatestCommit() {
-            await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("commitDate").innerHTML = data[0].commit.author.date;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        async function updateDonoAmount() {
-            await fetch(`https://raw.githubusercontent.com/GirlInPurple/frwebsite/wiki/backend.json`)
-                .then(resp => resp.json())
-                .then(async(backend) => {
-                    await fetch(`https://api.frankfurter.app/latest?amount=${backend.donations}&from=USD&to=EUR,INR,CNY`)
-                        .then(resp => resp.json())
-                        .then((conversionData) => {
-                            console.log(conversionData)
-                            let donoBoard = document.getElementById('donoBoard');
-                            donoBoard.innerText = `$${backend.donations}USD`
-                            donoBoard.title = `
-                            Click here to view our financials.\nAs of ${conversionData.date}, $${backend.donations}USD is equal to;\n€${conversionData.rates.EUR}EUR,\n₹${conversionData.rates.INR}INR,\n¥${conversionData.rates.CNY}CNY`
-                        });
+        <script>
+            window.onload = async function(){
+                // Set the theme based on the value in localStorage
+                let darkMode = localStorage.getItem('darkMode') === 'true';
+                let themeStylesheet = document.getElementById('themeStylesheet');
+                themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
+                
+                // set up hover on the nav
+                let histDropParent = document.getElementById('dropdownParentHist');
+                let histDrop = document.getElementById('histDrop');
+                histDropParent.addEventListener('mouseover', function() {
+                    histDrop.style.display = 'block';
                 });
-        }
-    </script>
+                histDropParent.addEventListener('mouseout', function() {
+                    histDrop.style.display = 'none';
+                });
+    
+                let infoDropParent = document.getElementById('dropdownParentInfo');
+                let infoDrop = document.getElementById('infoDrop');
+                infoDropParent.addEventListener('mouseover', function() {
+                    infoDrop.style.display = 'block';
+                });
+                infoDropParent.addEventListener('mouseout', function() {
+                    infoDrop.style.display = 'none';
+                });
+                
+                let width = window.innerWidth;
+                console.log(width)
+                if (width <= 900){
+                    const redirect = 'index.mobile.html'
+                    window.location.replace(redirect);
+                }
+    
+                changeSplashText();
+                await getLatestCommit()
+                await updateDonoAmount()
+            };
+    
+            function changeSplashText() {
+                const splashValues = [
+                    "Quite the rarity 'init?",
+                    "\"We are going to have some downtime\"",
+                    "Now on 1.19.4!",
+                    "RIP Skele Horse, 2023-2023 :(",
+                    "16 Towns Total!",
+                    "ERROR 418: Teapot not found!",
+                    "Radioactive Spaghetti, 30k Calories of Fun!",
+                    "\"Coming Soon!\" for 6 weeks!",
+                    "we have too many trains and highways plz help",
+                    "temp splash"
+                ]
+                const splashSizes = [17, 10, 19, 17, 18, 17, 10, 17, 9, 25]
+                const splashNumber = Math.min(Math.floor(Math.random() * 10), splashValues.length - 1)
+                const splashText = document.getElementById('splashText')
+                splashText.innerHTML = splashValues[splashNumber]
+                splashText.style.fontSize = `${splashSizes[splashNumber]}px`;
+            }
+    
+            // This function toggles between light and dark mode
+            function toggleTheme() {
+                let themeStylesheet = document.getElementById('themeStylesheet');
+                let darkMode = localStorage.getItem('darkMode') === 'true';
+                if (darkMode) {
+                    themeStylesheet.href = 'light.css';
+                    localStorage.setItem('darkMode', 'false');
+                } else {
+                    themeStylesheet.href = 'dark.css';
+                    localStorage.setItem('darkMode', 'true');
+                }
+            }
+    
+            async function getLatestCommit() {
+                await fetch("https://api.github.com/repos/GirlInPurple/frwebsite/commits")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("commitDate").innerHTML = data[0].commit.author.date;
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+    
+            async function updateDonoAmount() {
+                await fetch(`https://raw.githubusercontent.com/GirlInPurple/frwebsite/wiki/backend.json`)
+                    .then(resp => resp.json())
+                    .then(async(backend) => {
+                        await fetch(`https://api.frankfurter.app/latest?amount=${backend.donations}&from=USD&to=EUR,INR,CNY`)
+                            .then(resp => resp.json())
+                            .then((conversionData) => {
+                                console.log(conversionData)
+                                let donoBoard = document.getElementById('donoBoard');
+                                donoBoard.innerText = `$${backend.donations}USD`
+                                donoBoard.title = `
+                                Click here to view our financials.\nAs of ${conversionData.date}, $${backend.donations}USD is equal to;\n€${conversionData.rates.EUR}EUR,\n₹${conversionData.rates.INR}INR,\n¥${conversionData.rates.CNY}CNY`
+                            });
+                    });
+            }
+        </script>
+    </body>
 </html>
