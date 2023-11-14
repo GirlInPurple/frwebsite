@@ -1,5 +1,5 @@
 # [The Final Republic Wiki Page](#wiki-guide)
-___Tags:<span class="tag tag-purple">Guide</span><span class="tag tag-green">2022</span><span class="tag tag-blurple">DJzombiehunter</span>___
+___Tags:<span class="tag tag-purple">Guide</span><span class="tag tag-pink">2023</span><span class="tag tag-blurple">DJzombiehunter</span>___
 
 ### Summary
 
