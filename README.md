@@ -8,9 +8,9 @@ This fork was created cause the old site and repo is a mess, and i don't want an
 
 Feel free to fork and add your own features, but there is no guarantee i will merge them. Please submit them as PRs, not full commits.
 
-I should also mention that you need to keep both the [Typescript](https://github.com/microsoft/TypeScript) (`.ts`) and compiled Typescript (`.js`) should be committed to this repo. All TS Map files are ignored as they're only for debugging and IDE support.
+To get started, run `npm install`, wait for all the packages to download, then run `npm run` or whatever you have as a keybind for it to start the server. It should be located at [http://localhost:8080](http://localhost:8080), or if you have a `.env` file with a `PORT` variable, you can set it to whatever port you like.
 
-To get started, run `npm i && npx tsc -w -p .`, wait for all the packages to download, you should then be given the Typescript Watcher in the console you ran the command from. Keep it running while you modify the files. Run `npm run` or whatever you have as a keybind for it to start the server. It should be located at [http://localhost:8080](http://localhost:8080), or if you have a `.env` file with a `PORT` variable, you can set it to whatever port you like.
+I am switching away from Typescript because it has been nothing but problems trying to integrate it into the rest of the project. Please do not use typescript here.
 
 ## written plans
 

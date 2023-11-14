@@ -63,6 +63,9 @@
                 <a onclick="toggleArticles(undefined, true); window.history.pushState({}, document.title, window.location.href.split('#')[0]);">< < < Return back to the Wiki</a><br>
                 <a id="lastViewed" onclick="toggleArticles('', true)" style="display: none;">< < < Return back to Last Viewed Page</a>
             </div>
+            <div id="showWhenLinked" style="display: none;">
+                <p id="editWithHash"></p>
+            </div>
             <div id="hideWhenArticle">
                 <h1><i><noscript>Your browser either does not support JavaScript or you have it turned off. This site wont work without it, please enable it!</noscript></i></h1>
 
@@ -124,10 +127,11 @@
                 setTheme();
                 setupHover('dropdownParentHist', 'histDrop');
                 setupHover('dropdownParentInfo', 'infoDrop');
+                linkHashStart()
                 handleMobileSupport();
-                await getLatestCommit()
-                await startWikiSys()
-                linkHash()
+                await getLatestCommit();
+                await startWikiSys();
+                linkHashEnd(); // must run last
             }
 
             document.getElementById('searchInput').addEventListener('input', async function() {
@@ -149,10 +153,24 @@
                 }
             });
 
-            function linkHash() {
+            function linkHashEnd() {
                 let linkHash = window.location.hash.slice(1);
                 if (linkHash != "") {
                     toggleArticles(linkHash)
+                }
+            }
+
+            function linkHashStart() {
+                let dashHide = document.getElementById('hideWhenArticle')
+                let dashShow = document.getElementById('showWhenLinked')
+                let dashEdit = document.getElementById('editWithHash')
+                let wikiHide = document.getElementById('wikiContent')
+                let linkHash = window.location.hash.slice(1);
+                if (linkHash != "") {
+                    dashHide.style.display = 'none'
+                    wikiHide.style.display = 'none'
+                    dashShow.style.display = 'block'
+                    dashEdit.innerText = `Don't worry, the page isn't frozen! Your article "${linkHash}" is loading!`
                 }
             }
 
@@ -227,6 +245,8 @@
                 let articles = document.getElementsByTagName('article')
                 let dashHide = document.getElementById('hideWhenArticle')
                 let dashShow = document.getElementById('showWhenArticle')
+                let dashLinked = document.getElementById('showWhenLinked')
+                let wikiShow = document.getElementById('wikiContent')
                 let lastArticle = document.getElementById('lastViewed')
                 let errorArticle = document.getElementById('dead-links')
     
@@ -244,6 +264,8 @@
     
                 // hide EVERYTHING
                 dashHide.style.display = 'none'
+                dashLinked.style.display = 'none' // these two just in case linkHashStart() is run
+                wikiShow.style.display = 'block'
                 for(let i = 0; i < articles.length; i++) {
                     articles[i].style.display = 'none';
                 }
@@ -293,25 +315,25 @@
                     links[i].addEventListener('click', function() {
                         clearTimeout(this.searchTimeout);
                         this.searchTimeout = setTimeout(() => {
-                            linkHash();
+                            linkHashEnd();
                         }, '50');
                     });
                 }
             }
             
             function addInputBoxes(json, array, inject) {
-                for (let searchIndex = 0; searchIndex < json[array].length; searchIndex++) {
+                for (let searchIndex = 0; searchIndex < json.wiki[array].length; searchIndex++) {
                     // Checkbox
                     let eleBox = document.createElement("input");
                     eleBox.type = 'checkbox';
-                    eleBox.id = json[array][searchIndex];
-                    eleBox.name = json[array][searchIndex];
-                    eleBox.value = json[array][searchIndex];
+                    eleBox.id = json.wiki[array][searchIndex];
+                    eleBox.name = json.wiki[array][searchIndex];
+                    eleBox.value = json.wiki[array][searchIndex];
                     inject.appendChild(eleBox);
                     // Label
                     eleBox = document.createElement("label");
-                    eleBox.for = json[array][searchIndex];
-                    eleBox.innerHTML = json[array][searchIndex];
+                    eleBox.for = json.wiki[array][searchIndex];
+                    eleBox.innerHTML = json.wiki[array][searchIndex];
                     inject.appendChild(eleBox);
                     // Spacer
                     eleBox = document.createElement("br");
@@ -402,29 +424,38 @@
     
                         // make all the articles
                         for (let articleIndex = 0; articleIndex < wikiJsonData.length; articleIndex++) {
-                            if (wikiJsonData[articleIndex].endsWith('.json')){
-                                continue;
+                            if (wikiJsonData[articleIndex] == "README.md"){
+                                continue; // skip README.md cause it junk data
                             }
                             await fetch(`https://raw.githubusercontent.com/GirlInPurple/frwebsite/wiki/${wikiJsonData[articleIndex]}`)
                                 .then(response => response.text())
                                 .then(data => {
-    
-                                    // making article
-                                    let articleElement = document.getElementById('wikiContent')
-                                    let eleSplice = document.createElement("article");
-                                    let eleFront = document.createElement("article");
-    
-                                    let converter = new showdown.Converter()
-                                    // loading splice article
-                                    eleSplice.innerHTML = `${converter.makeHtml(data).substring(0,500)}... <a href="#${wikiJsonData[articleIndex].split(".")[0]}">(click here to read more)<a>`
-                                    eleSplice.id = `${wikiJsonData[articleIndex].split(".")[0]}-splice`;
-                                    eleSplice.style.fontSize = '10px'
-                                    articleElement.appendChild(eleSplice);
-                                    // loading fronting article
-                                    eleFront.innerHTML = converter.makeHtml(data)
-                                    eleFront.id = wikiJsonData[articleIndex].split(".")[0];
-                                    eleFront.style.display = 'none'
-                                    articleElement.appendChild(eleFront);
+                                    if (wikiJsonData[articleIndex].endsWith('.json')){
+                                        // grabbing needed data
+                                        console.log(wikiJsonData)
+                                        let searchInfo = JSON.parse(data)
+                                        console.log(searchInfo)
+                                        addInputBoxes(searchInfo, "tags", document.getElementById('tagsInject'))
+                                        addInputBoxes(searchInfo, "years", document.getElementById('yearsInject'))
+                                        addInputBoxes(searchInfo, "authors", document.getElementById('authorsInject'))
+                                    } else {
+                                        // making article
+                                        let articleElement = document.getElementById('wikiContent')
+                                        let eleSplice = document.createElement("article");
+                                        let eleFront = document.createElement("article");
+        
+                                        let converter = new showdown.Converter()
+                                        // loading splice article
+                                        eleSplice.innerHTML = `${converter.makeHtml(data).substring(0,500)}... <a href="#${wikiJsonData[articleIndex].split(".")[0]}">(click here to read more)<a>`
+                                        eleSplice.id = `${wikiJsonData[articleIndex].split(".")[0]}-splice`;
+                                        eleSplice.style.fontSize = '10px'
+                                        articleElement.appendChild(eleSplice);
+                                        // loading fronting article
+                                        eleFront.innerHTML = converter.makeHtml(data)
+                                        eleFront.id = wikiJsonData[articleIndex].split(".")[0];
+                                        eleFront.style.display = 'none'
+                                        articleElement.appendChild(eleFront);
+                                    }
                                 })
                                     
                         };

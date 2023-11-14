@@ -47,16 +47,18 @@
 
     <script>
         window.onload = async function() {
-            await fetch('./wikiPages/wiki.json')
-                .then(response => response.text())
-                .then(async(data) => {
-                    wikiJsonData = JSON.parse(data)
-                    const droopSnootPointer = document.getElementById('articleDropdown')
-                    for (let articleIndex = 0; articleIndex < wikiJsonData.pages.length; articleIndex++) {
-                        let droopSnootValue = document.createElement("option");
-                        droopSnootValue.value = wikiJsonData.pages[articleIndex]
-                        droopSnootValue.innerText = wikiJsonData.pages[articleIndex]
-                        droopSnootPointer.appendChild(droopSnootValue);
+            await fetch('https://api.github.com/repos/GirlInPurple/frwebsite/git/trees/wiki?recursive=1')
+                    .then(response => response.text())
+                    .then(async(data) => {
+                        wikiJsonData = JSON.parse(data)
+                        wikiJsonData = wikiJsonData.tree.map(item => item.path)
+
+                        const droopSnootPointer = document.getElementById('articleDropdown')
+                        for (let articleIndex = 0; articleIndex < wikiJsonData.length; articleIndex++) {
+                            let droopSnootValue = document.createElement("option");
+                            droopSnootValue.value = wikiJsonData[articleIndex]
+                            droopSnootValue.innerText = wikiJsonData[articleIndex]
+                            droopSnootPointer.appendChild(droopSnootValue);
                     }
                 });
         }
@@ -67,7 +69,7 @@
             if (articleDropdown.value == 'create-page') {
                 textGrabber = document.getElementById('page')
             }
-            await fetch(`./wikiPages/${textGrabber.value}.md`)
+            await fetch(`https://raw.githubusercontent.com/GirlInPurple/frwebsite/wiki/${textGrabber.value}`)
                 .then(response => response.text())
                 .then(async(data) => {
                     if (!data.startsWith('<!DOCTYPE html>')) {

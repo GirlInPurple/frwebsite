@@ -6,7 +6,7 @@ Most of this code isnt mine anyway, thanks stackoverflow
 
 */
 
-const { commitFileToRepo, wikiChannelWebhook } = require('./apis')
+const { commitFileToRepo, wikiChannelWebhook} = require('./apis')
 const { getBlockedIps, genHexString } = require('./misc')
 const dotenv = require('dotenv');
 const http = require('http');
@@ -52,13 +52,13 @@ http.createServer(async function (req, res) {
 
             await wikiChannelWebhook(userAlias, userIp, `${dropdown}`, hexEditId, notes, content)
             await commitFileToRepo('GirlInPurple', 'frwebsite', 'wiki', 
-                `${dropdown}.md`, 
+                `${dropdown}`, 
                 `${content}`, // sanitized = sanitize(fileContent, {allowedTags: ['br', 'div']})
                 `Update ${dropdown}.md; Notes from Editor; ${notes}`
             );
 
             res.writeHead(202, { 'Content-Type': 'text/html' })
-            fs.readFile('./submit.html', function (err, data) {
+            fs.readFile('./views/submit.html', function (err, data) {
                 res.write(data)
                 res.end();
             });
