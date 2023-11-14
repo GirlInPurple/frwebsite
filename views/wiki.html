@@ -18,8 +18,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
         <!-- wiki libraries; Markdown converter -->
 
-        <link id="themeStylesheet" rel="stylesheet" href="wiki.css">
-        <link id="themeStylesheet" rel="stylesheet" href="authors.css">
+        <link id="wikiStylesheet" rel="stylesheet" href="wiki.css">
+        <link id="authorStylesheet" rel="stylesheet" href="authors.css">
         <!-- wiki overrides -->
 
         <!-- mobile support, keep this at the end of <head> so it can override the loaded stylesheet -->
@@ -60,7 +60,7 @@
         </nav>
         <div class="center">
             <div id="showWhenArticle" style="display: none;">
-                <a onclick="toggleArticles(undefined, true)">< < < Return back to the Wiki</a><br>
+                <a onclick="toggleArticles(undefined, true); window.history.pushState({}, document.title, window.location.href.split('#')[0]);">< < < Return back to the Wiki</a><br>
                 <a id="lastViewed" onclick="toggleArticles('', true)" style="display: none;">< < < Return back to Last Viewed Page</a>
             </div>
             <div id="hideWhenArticle">
@@ -99,7 +99,7 @@
         </div>
         <div style="padding: 18em"></div>
         <button id="scrollToTopButton" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">Scroll to Top</button>
-        <footer id="footer">
+        <footer>
             <p style="text-align: center;">
                 | &copy; 2022-2023 The Final Republic, FinalRepublic
                 | GPL v3 ; Open to Contributors ; Hosted on <a href="https://github.com/GirlInPurple/frwebsite">Github</a> and <a href="https://www.fl0.com/">FL0</a> ; Last Updated <a id="commitDate"></a>
@@ -110,6 +110,16 @@
         </footer>
         <script>
 
+            /*
+                To the occasional contributor;
+                This code is a mess. refactor it all you want, there is no way to get it to play nice.
+                Ive spent far too many hours throwing together patch after patch, its become quite the italian dish.
+                To those wanting to help, don't, i beg of you.
+                If you must fix something here, please add to this counter the rough amount of time it took to do.
+                Good luck solider, you'll need it.
+                Hours Spent: 2 hours and 35 mins
+            */
+
             window.onload = async function() {
                 setTheme();
                 setupHover('dropdownParentHist', 'histDrop');
@@ -117,6 +127,7 @@
                 handleMobileSupport();
                 await getLatestCommit()
                 await startWikiSys()
+                linkHash()
             }
 
             document.getElementById('searchInput').addEventListener('input', async function() {
@@ -138,10 +149,11 @@
                 }
             });
 
-            function setTheme() {
-                let darkMode = localStorage.getItem('darkMode') === 'true';
-                let themeStylesheet = document.getElementById('themeStylesheet');
-                themeStylesheet.href = darkMode ? 'dark.css' : 'light.css';
+            function linkHash() {
+                let linkHash = window.location.hash.slice(1);
+                if (linkHash != "") {
+                    toggleArticles(linkHash)
+                }
             }
 
             function setupHover(parentId, childId) {
@@ -174,14 +186,28 @@
 
             function toggleTheme() {
                 let themeStylesheet = document.getElementById('themeStylesheet');
+                let wikiStylesheet = document.getElementById('wikiStylesheet');
                 let darkMode = localStorage.getItem('darkMode') === 'true';
                 if (darkMode) {
                     themeStylesheet.href = 'light.css';
+                    wikiStylesheet.href = 'wiki.css';
                     localStorage.setItem('darkMode', 'false');
                 } else {
                     themeStylesheet.href = 'dark.css';
+                    wikiStylesheet.href = 'wiki_dark.css';
                     localStorage.setItem('darkMode', 'true');
                 }
+            }
+
+            function setTheme() {
+                let stylesheet
+                let darkMode = localStorage.getItem('darkMode') === 'true';
+                // main
+                stylesheet = document.getElementById('themeStylesheet');
+                stylesheet.href = darkMode ? 'dark.css' : 'light.css';
+                // wiki specific
+                stylesheet = document.getElementById('wikiStylesheet');
+                stylesheet.href = darkMode ? 'wiki_dark.css' : 'wiki.css';
             }
 
             function insertTag(inputTag) {
@@ -254,9 +280,9 @@
                         var articleExists = document.getElementById(articleId) !== null;
                         // update tooltip
                         if (articleExists) {
-                            links[i].title = links[i].innerText + "\nClick to Visit Article";
+                            links[i].title = `Link to article: ${links[i].href.split('#')[1]}\nClick to Visit Article`;
                         } else {
-                            links[i].title = links[i].innerText + "\nArticle Does Not Exist";
+                            links[i].title = `Link to article: ${links[i].href.split('#')[1]}\nArticle Does Not Exist`;
                             links[i].style.color = "rgb(256, 64, 64)";
                         }
                     }
@@ -264,11 +290,11 @@
     
                 // add a click listener to each link, VERY resource heavy but fuck it, it will work
                 for (var i = 0; i < links.length; i++) {
-                    links[i].addEventListener('click', function(event) {
-                        // i honestly dont know what this does but the internet says to add it
-                        event.preventDefault(); 
-                        // hide all but the needed link
-                        toggleArticles(this.getAttribute('href'))
+                    links[i].addEventListener('click', function() {
+                        clearTimeout(this.searchTimeout);
+                        this.searchTimeout = setTimeout(() => {
+                            linkHash();
+                        }, '50');
                     });
                 }
             }

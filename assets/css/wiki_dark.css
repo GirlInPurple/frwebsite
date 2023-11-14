@@ -10,15 +10,11 @@
     transition: all 0.3s ease;
 }
 
-.tag.transition {
-    transition: all 0.3s ease;
-}
-
 input[type="text"] {
     width: 100%;
     max-width: 400px;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #555;
     border-radius: 5px;
     font-size: 16px;
     outline: none;
@@ -68,11 +64,11 @@ button:active {
 }
 
 article {
-    border: 1px solid #a8a8a8;
+    border: 1px solid #dbdbdb;
     border-radius: 5px;
     margin-bottom: 20px;
     padding: 15px;
-    background-color: #dadada;
+    background-color: #555;
     /* Darker background for articles */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     /* Darker box shadow */
@@ -87,12 +83,12 @@ article img {
 }
 
 article h2 {
-    color: #202020;
+    color: #dbdbdb;
     margin-bottom: 10px;
 }
 
 article p {
-    color: #202020;
+    color: #dbdbdb;
     /* Slightly lighter text color */
 }
 
@@ -102,7 +98,7 @@ article ul {
 }
 
 article li {
-    color: #202020;
+    color: #dbdbdb;
     /* Slightly lighter text color */
 }
 
