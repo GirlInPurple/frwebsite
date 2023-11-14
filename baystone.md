@@ -1,5 +1,7 @@
-# [Baystone](#baystone)
-___Tags:<span class="tag tag-green">Location</span><span class="tag tag-pink">2023</span><span class="tag tag-blue">English</span><span class="tag tag-blurple">DJzombiehunter</span>___
+[Baystone](#baystone)
+=====================
+
+Tags:Location2023EnglishDJzombiehunter
 
 Baystone is a small town in the North-Western corner of the map, based around a witch farm, a small village, and build based off an old base of mine and [@MrRoboWrestler's](#mrrobowrestler).
 
