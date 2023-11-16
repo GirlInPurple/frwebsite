@@ -18,7 +18,7 @@ function sanitizeMarkdownInput(markdownInput) {
     // Convert the Markdown input to HTML
     const html = marked.parse(markdownInput);
     // Sanitize the HTML using DOMPurify
-    const sanitizedHtml = DOMPurify.sanitize(html, { ALLOWED_TAGS: ['div','span','p','h1','h2','h3','h4','img','a','i','b','u','li','ul'] });
+    const sanitizedHtml = DOMPurify.sanitize(html, { ALLOWED_TAGS: ['div','span','code','p','h1','h2','h3','h4','img','a','i','b','u','li','ul'] });
     // Convert the sanitized HTML back to Markdown
     return turndownService.turndown(sanitizedHtml);
 }
